@@ -1,5 +1,5 @@
 use utf8;
-package CpanStats::Result::CpanStats;
+package CPAN::Testers::Schema::Result::CpanStats;
 
 use strict;
 use warnings;

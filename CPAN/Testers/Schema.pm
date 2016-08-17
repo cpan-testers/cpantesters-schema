@@ -1,5 +1,5 @@
 use utf8;
-package CpanStats;
+package CPAN::Testers::Schema;
 # ABSTRACT: DBIx::Class::Schema for CPANTesters cpanstats db
 
 use strict;
