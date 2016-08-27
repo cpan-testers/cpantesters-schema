@@ -1,18 +1,20 @@
-use utf8;
 package CPAN::Testers::Schema;
+
 # ABSTRACT: DBIx::Class::Schema for CPANTesters cpanstats db
+
+=head1 SYNOPSIS
+
+=head1 DESCRIPTION
+
+=head1 SEE ALSO
+
+=cut
 
 use strict;
 use warnings;
-
 use base 'DBIx::Class::Schema';
 
 __PACKAGE__->load_namespaces;
-
-
-our $VERSION = 0;   # DBIx::Class::Deploymenthandler?
-
-
 
 # Convenience connect method
 sub connect_from_config {
