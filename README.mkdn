@@ -1,0 +1,25 @@
+# NAME
+
+CPAN::Testers::Schema - DBIx::Class::Schema for CPANTesters cpanstats db
+
+# VERSION
+
+version 0.001
+
+# SYNOPSIS
+
+# DESCRIPTION
+
+# SEE ALSO
+
+# AUTHORS
+
+- Oriol Soriano <oriolsoriano@gmail.com>
+- Doug Bell <preaction@cpan.org>
+
+# COPYRIGHT AND LICENSE
+
+This software is copyright (c) 2016 by Doug Bell.
+
+This is free software; you can redistribute it and/or modify it under
+the same terms as the Perl 5 programming language system itself.

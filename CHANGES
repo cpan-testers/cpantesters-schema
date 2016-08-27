@@ -1,0 +1,9 @@
+Changelog for CPAN-Testers-Schema
+
+0.001 2016-08-27T21:52:06
+ - add dist scaffolding
+ - move modules to lib directory for CPAN-style dist
+ - Fixes classes names, according to new namespacing
+ - Fixes namespaces, according to Doug requirements
+ - Adds CpanStats Result class for table 'cpanstats'
+ - Adds DBIx::Class::Schema CpanStats
