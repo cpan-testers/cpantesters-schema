@@ -7,7 +7,7 @@ use 5.008;
 use ExtUtils::MakeMaker;
 
 my %WriteMakefileArgs = (
-  "ABSTRACT" => "DBIx::Class::Schema for CPANTesters cpanstats db",
+  "ABSTRACT" => "Schema for CPANTesters database processed from test reports",
   "AUTHOR" => "Oriol Soriano <oriolsoriano\@gmail.com>, Doug Bell <preaction\@cpan.org>",
   "CONFIGURE_REQUIRES" => {
     "ExtUtils::MakeMaker" => 0
