@@ -1,12 +1,5 @@
 Changelog for CPAN-Testers-Schema
 
-0.001 2016-08-28T00:34:06
- - add documentation to the existing modules
- - rename "CpanStats" result class to just "Stats"
- - add build artifacts
- - add dist scaffolding
- - move modules to lib directory for CPAN-style dist
- - Fixes classes names, according to new namespacing
- - Fixes namespaces, according to Doug requirements
- - Adds CpanStats Result class for table 'cpanstats'
- - Adds DBIx::Class::Schema CpanStats
+{{ $NEXT }}
+
+ - Initial release
