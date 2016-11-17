@@ -1,11 +1,11 @@
 use utf8;
-package CPAN::Testers::Schema::Result::Uploads;
+package CPAN::Testers::Schema::Result::Upload;
 our $VERSION = '0.001';
 # ABSTRACT: Information about uploads to CPAN
 
 =head1 SYNOPSIS
 
-    my $upload = $schema->resultset( 'Uploads' )
+    my $upload = $schema->resultset( 'Upload' )
         ->search( dist => 'My-Dist', version => '0.01' )->first;
 
     say $row->author . " released as " . $row->filename;
@@ -14,7 +14,7 @@ our $VERSION = '0.001';
         say "Deleted from CPAN";
     }
 
-    my $new_upload = $schema->resultset( 'Uploads' )->create({
+    my $new_upload = $schema->resultset( 'Upload' )->create({
         type => 'cpan',
         dist => 'My-Dist',
         version => '1.001',
