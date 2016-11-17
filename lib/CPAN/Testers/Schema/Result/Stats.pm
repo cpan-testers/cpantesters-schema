@@ -292,7 +292,8 @@ __PACKAGE__->add_columns(
 =attr uploadid
 
 The ID of the upload that created this dist. Related to the C<uploadid>
-field in the C<uploads> table.
+field in the C<uploads> table (see
+L<CPAN::Testers::Schema::Result::Uploads>).
 
 =cut
 
@@ -302,6 +303,9 @@ __PACKAGE__->add_columns(
     extra       => { unsigned => 1 },
     is_nullable => 0,
   },
+);
+__PACKAGE__->belongs_to(
+    upload => Uploads => 'uploadid',
 );
 
 1;
