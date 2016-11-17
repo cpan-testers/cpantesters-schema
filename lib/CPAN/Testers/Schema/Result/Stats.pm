@@ -308,8 +308,15 @@ __PACKAGE__->add_columns(
     is_nullable => 0,
   },
 );
+
+=method upload
+
+Get the related row in the `uploads` table. See L<CPAN::Testers::Schema::Result::Upload>.
+
+=cut
+
 __PACKAGE__->belongs_to(
-    upload => Uploads => 'uploadid',
+    upload => Upload => 'uploadid',
 );
 
 1;
