@@ -45,7 +45,7 @@ our @IMPORT_MODULES = (
 our %IMPORT_BUNDLES = (
     Test => [
         'Test::More', 'File::Temp', 'lib',
-        sub {
+        sub () {
             lib->import( 't/lib' );
             return;
         },

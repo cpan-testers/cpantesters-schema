@@ -41,8 +41,7 @@ project goals and to get involved.
 
 =cut
 
-use strict;
-use warnings;
+use CPAN::Testers::Schema::Base;
 use base 'DBIx::Class::Schema';
 
 __PACKAGE__->load_namespaces;
@@ -65,8 +64,8 @@ See L<DBD::mysql/mysql_read_default_file>.
 =cut
 
 # Convenience connect method
-sub connect_from_config {
-    my $schema = shift->connect(
+sub connect_from_config ( $class ) {
+    my $schema = $class->connect(
         "DBI:mysql:mysql_read_default_file=$ENV{HOME}/.cpanstats.cnf;".
         "mysql_read_default_group=application;mysql_enable_utf8=1",
         undef,  # user
@@ -79,7 +78,6 @@ sub connect_from_config {
             name_sep   => '.',
         },
     );
-    $schema->txn_begin;
     return $schema;
 }
 
