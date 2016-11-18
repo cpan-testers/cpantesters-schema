@@ -6,6 +6,10 @@ CPAN::Testers::Schema - Schema for CPANTesters database processed from test repo
 
 version 0.001
 
+# STATUS
+
+<a href="https://travis-ci.org/cpan-testers/cpantesters-schema"><img src="https://travis-ci.org/cpan-testers/cpantesters-schema.svg?branch=master"></a><a href="https://coveralls.io/r/cpan-testers/cpantesters-schema"><img src="https://coveralls.io/repos/cpan-testers/cpantesters-schema/badge.png" alt="Coverage Status" /></a>
+
 # SYNOPSIS
 
     my $schema = CPAN::Testers::Schema->connect( $dsn, $user, $pass );

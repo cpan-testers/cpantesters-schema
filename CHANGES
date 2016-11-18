@@ -1,6 +1,6 @@
 Changelog for CPAN-Testers-Schema
 
-{{ $NEXT }}
+0.001     2016-11-18 15:06:56-06:00 America/Chicago
 
  - This initial release contains a schema for some tables in the
    `cpanstats` database, with more tables to come later. This release is
