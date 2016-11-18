@@ -56,6 +56,11 @@ information about project goals and to get involved.
 
 =cut
 
+use CPAN::Testers::Schema::Base;
+use base 'DBIx::Class::Core';
+
+__PACKAGE__->table( 'uploads' );
+
 =attr uploadid
 
 The ID of this upload. Auto-generated.

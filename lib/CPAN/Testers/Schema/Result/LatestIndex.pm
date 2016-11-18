@@ -54,6 +54,11 @@ information about project goals and to get involved.
 
 =cut
 
+use CPAN::Testers::Schema::Base;
+use base 'DBIx::Class::Core';
+
+__PACKAGE__->table( 'ixlatest' );
+
 =attr dist
 
 The distribution name. Composite primary key with L</author>. Copied
@@ -150,7 +155,7 @@ L<CPAN::Testers::Schema::Result::Upload>.
 =cut
 
 __PACKAGE__->belongs_to(
-    upload => Uploads => 'uploadid',
+    upload => 'CPAN::Testers::Schema::Result::Upload' => 'uploadid',
 );
 
 1;

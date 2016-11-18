@@ -63,8 +63,8 @@ project goals and to get involved.
 
 =cut
 
-use strict;
-use warnings;
+use CPAN::Testers::Schema::Base;
+use base 'DBIx::Class::Core';
 
 __PACKAGE__->table('cpanstats');
 
@@ -316,7 +316,7 @@ Get the related row in the `uploads` table. See L<CPAN::Testers::Schema::Result:
 =cut
 
 __PACKAGE__->belongs_to(
-    upload => Upload => 'uploadid',
+    upload => 'CPAN::Testers::Schema::Result::Upload' => 'uploadid',
 );
 
 1;

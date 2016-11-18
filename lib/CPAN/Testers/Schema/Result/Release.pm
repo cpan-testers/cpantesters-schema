@@ -43,6 +43,11 @@ information about project goals and to get involved.
 
 =cut
 
+use CPAN::Testers::Schema::Base;
+use base 'DBIx::Class::Core';
+
+__PACKAGE__->table( 'release_summary' );
+
 =attr dist
 
 The name of the distribution.
@@ -227,7 +232,7 @@ L<CPAN::Testers::Schema::Result::Upload>.
 =cut
 
 __PACKAGE__->belongs_to(
-    upload => Uploads => 'uploadid',
+    upload => 'CPAN::Testers::Schema::Result::Upload' => 'uploadid',
 );
 
 1;
