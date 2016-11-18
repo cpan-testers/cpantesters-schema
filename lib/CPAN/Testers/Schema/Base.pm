@@ -44,11 +44,7 @@ our @IMPORT_MODULES = (
 
 our %IMPORT_BUNDLES = (
     Test => [
-        'Test::More', 'File::Temp', 'lib',
-        sub () {
-            lib->import( 't/lib' );
-            return;
-        },
+        'Test::More', 'Test::Lib',
         'Local::Schema' => [qw( prepare_temp_schema )],
     ],
 );
