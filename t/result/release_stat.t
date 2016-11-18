@@ -1,7 +1,7 @@
 
 =head1 DESCRIPTION
 
-This file tests the L<CPAN::Testers::Schema::Result::LatestIndex> class.
+This file tests the L<CPAN::Testers::Schema::Result::ReleaseStat> class.
 
 =head1 SEE ALSO
 
@@ -23,18 +23,25 @@ subtest 'upload relationship' => sub {
     );
     my $upload = $schema->resultset( 'Upload' )->create( \%upload );
 
-    my %latest = (
-        oncpan => 1,
+    my %release = (
         dist => 'My-Dist',
         version => '1.000',
-        author => 'PREACTION',
-        released => 1366237867,
+        id => 1,
+        guid => '00000000-0000-0000-0000-000000000000',
+        oncpan => 1,
+        distmat => 1,
+        perlmat => 1,
+        patched => 1,
+        pass => 1,
+        fail => 0,
+        na => 0,
+        unknown => 0,
         uploadid => $upload->uploadid,
     );
-    my $latest = $schema->resultset( 'LatestIndex' )->create( \%latest );
+    my $release = $schema->resultset( 'ReleaseStat' )->create( \%release );
 
-    ok $latest->upload, 'upload relationship exists';
-    is $latest->upload->uploadid, $upload->uploadid, 'correct upload is related';
+    ok $release->upload, 'upload relationship exists';
+    is $release->upload->uploadid, $upload->uploadid, 'correct upload is related';
 };
 
 done_testing;
