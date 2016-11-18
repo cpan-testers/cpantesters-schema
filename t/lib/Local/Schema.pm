@@ -9,6 +9,9 @@ package Local::Schema;
 
 =head1 DESCRIPTION
 
+This module creates a local temporary database for testing the schema
+and ORM.
+
 =head1 SEE ALSO
 
 =over
