@@ -22,7 +22,7 @@ the useful fields like distribution, version, platform, and others (see
 L<CPAN::Testers::Schema::Result::Stats> for a full list).
 
 This is its own distribution so that it can be shared by the backend
-processing and the frontend web application.
+processing, data APIs, and the frontend web application.
 
 =head1 SEE ALSO
 
@@ -46,6 +46,23 @@ use warnings;
 use base 'DBIx::Class::Schema';
 
 __PACKAGE__->load_namespaces;
+
+=method connect_from_config
+
+    my $schema = CPAN::Testers::Schema->connect_from_config;
+
+Connect to the MySQL database using a local MySQL configuration file
+in C<$HOME/.cpanstats.cnf>. This configuration file should look like:
+
+    [client]
+    host     = ""
+    database = cpanstats
+    user     = my_usr
+    password = my_pwd
+
+See L<DBD::mysql/mysql_read_default_file>.
+
+=cut
 
 # Convenience connect method
 sub connect_from_config {
