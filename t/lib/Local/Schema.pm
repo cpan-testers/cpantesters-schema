@@ -13,8 +13,6 @@ package Local::Schema;
 
 =over
 
-=item L<File::Temp>
-
 =item L<DBD::SQLite>
 
 =back
@@ -23,7 +21,6 @@ package Local::Schema;
 
 use CPAN::Testers::Schema::Base;
 use CPAN::Testers::Schema;
-use File::Temp;
 use Exporter qw( import );
 our @EXPORT_OK = qw(
     prepare_temp_schema
