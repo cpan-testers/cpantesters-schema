@@ -2,4 +2,8 @@ Changelog for CPAN-Testers-Schema
 
 {{ $NEXT }}
 
- - Initial release
+ - This initial release contains a schema for some tables in the
+   `cpanstats` database, with more tables to come later. This release is
+   minimal to enable its use in the new CPAN Testers API, coming later.
+
+   Hello from meta::hack 2016 in Chicago!
