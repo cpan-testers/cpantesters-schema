@@ -84,6 +84,10 @@
       "CPAN::Testers::Schema::Result::Upload" : {
          "file" : "lib/CPAN/Testers/Schema/Result/Upload.pm",
          "version" : "0.002"
+      },
+      "CPAN::Testers::Schema::ResultSet::Release" : {
+         "file" : "lib/CPAN/Testers/Schema/ResultSet/Release.pm",
+         "version" : "0.002"
       }
    },
    "release_status" : "stable",
