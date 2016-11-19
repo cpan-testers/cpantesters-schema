@@ -54,10 +54,9 @@ information about project goals and to get involved.
 
 =cut
 
-use CPAN::Testers::Schema::Base;
-use base 'DBIx::Class::Core';
+use CPAN::Testers::Schema::Base 'Result';
 
-__PACKAGE__->table( 'ixlatest' );
+table 'ixlatest';
 
 =attr dist
 
@@ -66,12 +65,10 @@ from the `dist` column of the `uploads` table.
 
 =cut
 
-__PACKAGE__->add_column(
-    dist => {
-        data_type => 'varchar',
-        is_nullable => 0,
-    },
-);
+column dist => {
+    data_type => 'varchar',
+    is_nullable => 0,
+};
 
 =attr author
 
@@ -80,14 +77,12 @@ from the `author` column of the `uploads` table.
 
 =cut
 
-__PACKAGE__->add_column(
-    author => {
-        data_type => 'varchar',
-        is_nullable => 0,
-    }
-);
+column author => {
+    data_type => 'varchar',
+    is_nullable => 0,
+};
 
-__PACKAGE__->set_primary_key( qw( dist author ) );
+primary_key qw( dist author );
 
 =attr version
 
@@ -96,12 +91,10 @@ of the `uploads` table.
 
 =cut
 
-__PACKAGE__->add_column(
-    version => {
-        data_type => 'varchar',
-        is_nullable => 0,
-    }
-);
+column version => {
+    data_type => 'varchar',
+    is_nullable => 0,
+};
 
 =attr released
 
@@ -110,12 +103,10 @@ The UNIX epoch of the release. Copied from the `released` column of the
 
 =cut
 
-__PACKAGE__->add_column(
-    released => {
-        data_type => 'bigint',
-        is_nullable => 0,
-    }
-);
+column released => {
+    data_type => 'bigint',
+    is_nullable => 0,
+};
 
 =attr oncpan
 
@@ -127,12 +118,10 @@ this release is available on BackPAN.
 
 =cut
 
-__PACKAGE__->add_column(
-    oncpan => {
-        data_type => 'int',
-        is_nullable => 0,
-    }
-);
+column oncpan => {
+    data_type => 'int',
+    is_nullable => 0,
+};
 
 =attr uploadid
 
@@ -140,12 +129,10 @@ The ID of this upload from the `uploads` table.
 
 =cut
 
-__PACKAGE__->add_column(
-    uploadid => {
-        data_type => 'int',
-        is_nullable => 0,
-    }
-);
+column uploadid => {
+    data_type => 'int',
+    is_nullable => 0,
+};
 
 =method upload
 
@@ -154,8 +141,6 @@ L<CPAN::Testers::Schema::Result::Upload>.
 
 =cut
 
-__PACKAGE__->belongs_to(
-    upload => 'CPAN::Testers::Schema::Result::Upload' => 'uploadid',
-);
+belongs_to upload => 'CPAN::Testers::Schema::Result::Upload' => 'uploadid';
 
 1;

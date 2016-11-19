@@ -2,6 +2,10 @@ Changelog for CPAN-Testers-Schema
 
 {{ $NEXT }}
 
+    [Other]
+
+    - Switched to DBIx::Class::Candy for cleaner result classes
+
 0.002     2016-11-19 11:53:54-06:00 America/Chicago
 
     [Added]

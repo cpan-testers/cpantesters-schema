@@ -39,10 +39,16 @@ use base 'Import::Base';
 our @IMPORT_MODULES = (
     'strict', 'warnings',
     feature => [qw( :5.24 signatures )],
-    '-warnings' => [qw( experimental::signatures )],
+    '>-warnings' => [qw( experimental::signatures )],
 );
 
 our %IMPORT_BUNDLES = (
+    Result => [
+        'DBIx::Class::Candy',
+    ],
+    ResultSet => [
+        'DBIx::Class::Candy::ResultSet',
+    ],
     Test => [
         'Test::More', 'Test::Lib',
         'Local::Schema' => [qw( prepare_temp_schema )],

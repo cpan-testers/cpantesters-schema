@@ -31,8 +31,7 @@ project goals and to get involved.
 
 =cut
 
-use CPAN::Testers::Schema::Base;
-use base 'DBIx::Class::ResultSet';
+use CPAN::Testers::Schema::Base 'ResultSet';
 
 =method by_dist
 

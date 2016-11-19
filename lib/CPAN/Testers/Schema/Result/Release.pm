@@ -43,10 +43,8 @@ information about project goals and to get involved.
 
 =cut
 
-use CPAN::Testers::Schema::Base;
-use base 'DBIx::Class::Core';
-
-__PACKAGE__->table( 'release_summary' );
+use CPAN::Testers::Schema::Base 'Result';
+table 'release_summary';
 
 =attr dist
 
@@ -54,12 +52,10 @@ The name of the distribution.
 
 =cut
 
-__PACKAGE__->add_column(
-    dist => {
-        data_type => 'varchar',
-        is_nullable => 0,
-    }
-);
+column dist => {
+    data_type => 'varchar',
+    is_nullable => 0,
+};
 
 =attr version
 
@@ -67,12 +63,10 @@ The version of the distribution.
 
 =cut
 
-__PACKAGE__->add_column(
-    version => {
-        data_type => 'varchar',
-        is_nullable => 0,
-    }
-);
+column version => {
+    data_type => 'varchar',
+    is_nullable => 0,
+};
 
 =attr id
 
@@ -81,12 +75,10 @@ See L<CPAN::Testers::Schema::Result::Stats>.
 
 =cut
 
-__PACKAGE__->add_column(
-    id => {
-        data_type => 'int',
-        is_nullable => 0,
-    }
-);
+column id => {
+    data_type => 'int',
+    is_nullable => 0,
+};
 
 =attr guid
 
@@ -95,12 +87,10 @@ table. See L<CPAN::Testers::Schema::Result::Stats>.
 
 =cut
 
-__PACKAGE__->add_column(
-    guid => {
-        data_type => 'char',
-        is_nullable => 0,
-    }
-);
+column guid => {
+    data_type => 'char',
+    is_nullable => 0,
+};
 
 =attr oncpan
 
@@ -109,12 +99,10 @@ if the release has been deleted from CPAN and is only on BackPAN.
 
 =cut
 
-__PACKAGE__->add_column(
-    oncpan => {
-        data_type => 'int',
-        is_nullable => 0,
-    }
-);
+column oncpan => {
+    data_type => 'int',
+    is_nullable => 0,
+};
 
 =attr distmat
 
@@ -124,12 +112,10 @@ unindexed by CPAN.
 
 =cut
 
-__PACKAGE__->add_column(
-    distmat => {
-        data_type => 'int',
-        is_nullable => 0,
-    }
-);
+column distmat => {
+    data_type => 'int',
+    is_nullable => 0,
+};
 
 =attr perlmat
 
@@ -138,12 +124,10 @@ a stable release. C<2> if the Perl is a developer release.
 
 =cut
 
-__PACKAGE__->add_column(
-    perlmat => {
-        data_type => 'int',
-        is_nullable => 0,
-    }
-);
+column perlmat => {
+    data_type => 'int',
+    is_nullable => 0,
+};
 
 =attr patched
 
@@ -152,12 +136,10 @@ being patched, C<1> otherwise.
 
 =cut
 
-__PACKAGE__->add_column(
-    patched => {
-        data_type => 'int',
-        is_nullable => 0,
-    }
-);
+column patched => {
+    data_type => 'int',
+    is_nullable => 0,
+};
 
 =attr pass
 
@@ -165,12 +147,10 @@ The number of C<PASS> results for this release.
 
 =cut
 
-__PACKAGE__->add_column(
-    pass => {
-        data_type => 'int',
-        is_nullable => 0,
-    }
-);
+column pass => {
+    data_type => 'int',
+    is_nullable => 0,
+};
 
 =attr fail
 
@@ -178,12 +158,10 @@ The number of C<FAIL> results for this release.
 
 =cut
 
-__PACKAGE__->add_column(
-    fail => {
-        data_type => 'int',
-        is_nullable => 0,
-    }
-);
+column fail => {
+    data_type => 'int',
+    is_nullable => 0,
+};
 
 =attr na
 
@@ -191,12 +169,10 @@ The number of C<NA> results for this release.
 
 =cut
 
-__PACKAGE__->add_column(
-    na => {
-        data_type => 'int',
-        is_nullable => 0,
-    }
-);
+column na => {
+    data_type => 'int',
+    is_nullable => 0,
+};
 
 =attr unknown
 
@@ -204,12 +180,10 @@ The number of C<UNKNOWN> results for this release.
 
 =cut
 
-__PACKAGE__->add_column(
-    unknown => {
-        data_type => 'int',
-        is_nullable => 0,
-    }
-);
+column unknown => {
+    data_type => 'int',
+    is_nullable => 0,
+};
 
 =attr uploadid
 
@@ -217,12 +191,10 @@ The ID of this upload from the `uploads` table.
 
 =cut
 
-__PACKAGE__->add_column(
-    uploadid => {
-        data_type => 'int',
-        is_nullable => 0,
-    }
-);
+column uploadid => {
+    data_type => 'int',
+    is_nullable => 0,
+};
 
 =method upload
 
@@ -231,9 +203,7 @@ L<CPAN::Testers::Schema::Result::Upload>.
 
 =cut
 
-__PACKAGE__->belongs_to(
-    upload => 'CPAN::Testers::Schema::Result::Upload' => 'uploadid',
-);
+belongs_to upload => 'CPAN::Testers::Schema::Result::Upload' => 'uploadid';
 
 =method report
 
@@ -246,9 +216,8 @@ release was last updated.
 
 =cut
 
-__PACKAGE__->belongs_to(
-    report => 'CPAN::Testers::Schema::Result::Stats',
-    { 'foreign.guid' => 'self.guid' },
-);
+belongs_to report => 'CPAN::Testers::Schema::Result::Stats', {
+    'foreign.guid' => 'self.guid',
+};
 
 1;

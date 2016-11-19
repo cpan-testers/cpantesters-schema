@@ -63,10 +63,8 @@ project goals and to get involved.
 
 =cut
 
-use CPAN::Testers::Schema::Base;
-use base 'DBIx::Class::Core';
-
-__PACKAGE__->table('cpanstats');
+use CPAN::Testers::Schema::Base 'Result';
+table 'cpanstats';
 
 =attr id
 
@@ -74,15 +72,12 @@ The ID of the row. Auto-generated.
 
 =cut
 
-__PACKAGE__->add_columns(
-  'id', {
+primary_column 'id', {
     data_type         => 'int',
     extra             => { unsigned => 1 },
     is_auto_increment => 1,
     is_nullable       => 0,
-  },
-);
-__PACKAGE__->set_primary_key('id');
+};
 
 =attr guid
 
@@ -91,13 +86,11 @@ representation.
 
 =cut
 
-__PACKAGE__->add_columns(
-  'guid', {
+column 'guid', {
     data_type   => 'varchar',
     is_nullable => 0,
     size        => 36,
-  },
-);
+};
 
 =attr state
 
@@ -128,13 +121,11 @@ problem is on the tester's machine, are handled by the L</type> field.
 
 =cut
 
-__PACKAGE__->add_columns(
-  'state', {
+column 'state', {
     data_type   => 'enum',
     extra       => { list => ['pass', 'fail', 'unknown', 'na'] },
     is_nullable => 0,
-  },
-);
+};
 
 =attr postdate
 
@@ -143,13 +134,11 @@ format.
 
 =cut
 
-__PACKAGE__->add_columns(
-  'postdate', {
+column 'postdate', {
     data_type      => 'mediumint',
     extra          => { unsigned => 1 },
     is_nullable    => 0,
-  },
-);
+};
 
 =attr tester
 
@@ -158,13 +147,11 @@ the tester's name as a comment (C<doug@example.com (Doug Bell)>).
 
 =cut
 
-__PACKAGE__->add_columns(
-  'tester', {
+column 'tester', {
     data_type   => 'varchar',
     is_nullable => 0,
     size        => 100,
-  },
-);
+};
 
 =attr dist
 
@@ -172,13 +159,11 @@ The distribution that was tested.
 
 =cut
 
-__PACKAGE__->add_columns(
-  'dist', {
+column 'dist', {
     data_type   => 'varchar',
     is_nullable => 0,
     size        => 100,
-  },
-);
+};
 
 =attr version
 
@@ -186,13 +171,11 @@ The version of the distribution.
 
 =cut
 
-__PACKAGE__->add_columns(
-  'version', {
+column 'version', {
     data_type   => 'varchar',
     is_nullable => 0,
     size        => 20,
-  },
-);
+};
 
 =attr platform
 
@@ -200,13 +183,11 @@ The Perl C<platform> string (from C<$Config{archname}>).
 
 =cut
 
-__PACKAGE__->add_columns(
-  'platform',  {
+column 'platform',  {
     data_type   => 'varchar',
     is_nullable => 0,
     size        => 20,
-  },
-);
+};
 
 =attr perl
 
@@ -215,13 +196,11 @@ C<$Config{version}>).
 
 =cut
 
-__PACKAGE__->add_columns(
-  'perl',  {
+column 'perl',  {
     data_type   => 'varchar',
     is_nullable => 0,
     size        => 10,
-  },
-);
+};
 
 =attr osname
 
@@ -229,13 +208,11 @@ The name of the operating system (from C<$Config{osname}>).
 
 =cut
 
-__PACKAGE__->add_columns(
-  'osname',  {
+column 'osname',  {
     data_type   => 'varchar',
     is_nullable => 0,
     size        => 20,
-  },
-);
+};
 
 =attr osvers
 
@@ -243,13 +220,11 @@ The version of the operating system (from C<$Config{osvers}>).
 
 =cut
 
-__PACKAGE__->add_columns(
-  'osvers',  {
+column 'osvers',  {
     data_type   => 'varchar',
     is_nullable => 0,
     size        => 20,
-  },
-);
+};
 
 =attr fulldate
 
@@ -258,13 +233,11 @@ format.
 
 =cut
 
-__PACKAGE__->add_columns(
-  'fulldate', {
+column 'fulldate', {
     data_type   => 'char',
     is_nullable => 0,
     size        => 8,
-  },
-);
+};
 
 =attr type
 
@@ -285,13 +258,11 @@ This report was marked invalid by a user
 
 =cut
 
-__PACKAGE__->add_columns(
-  'type', {
+column 'type', {
     data_type   => 'tinyint',
     extra       => { unsigned => 1 },
     is_nullable => 0,
-  },
-);
+};
 
 =attr uploadid
 
@@ -301,13 +272,11 @@ L<CPAN::Testers::Schema::Result::Uploads>).
 
 =cut
 
-__PACKAGE__->add_columns(
-  'uploadid', {
+column 'uploadid', {
     data_type   => 'int',
     extra       => { unsigned => 1 },
     is_nullable => 0,
-  },
-);
+};
 
 =method upload
 
@@ -315,8 +284,6 @@ Get the related row in the `uploads` table. See L<CPAN::Testers::Schema::Result:
 
 =cut
 
-__PACKAGE__->belongs_to(
-    upload => 'CPAN::Testers::Schema::Result::Upload' => 'uploadid',
-);
+belongs_to upload => 'CPAN::Testers::Schema::Result::Upload' => 'uploadid';
 
 1;

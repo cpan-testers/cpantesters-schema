@@ -48,10 +48,8 @@ information about project goals and to get involved.
 
 =cut
 
-use CPAN::Testers::Schema::Base;
-use base 'DBIx::Class::Core';
-
-__PACKAGE__->table( 'release_data' );
+use CPAN::Testers::Schema::Base 'Result';
+table 'release_data';
 
 =attr dist
 
@@ -59,12 +57,10 @@ The name of the distribution.
 
 =cut
 
-__PACKAGE__->add_column(
-    dist => {
-        data_type => 'varchar',
-        is_nullable => 0,
-    }
-);
+column dist => {
+    data_type => 'varchar',
+    is_nullable => 0,
+};
 
 =attr version
 
@@ -72,12 +68,10 @@ The version of the distribution.
 
 =cut
 
-__PACKAGE__->add_column(
-    version => {
-        data_type => 'varchar',
-        is_nullable => 0,
-    }
-);
+column version => {
+    data_type => 'varchar',
+    is_nullable => 0,
+};
 
 =attr id
 
@@ -86,12 +80,10 @@ L<CPAN::Testers::Schema::Result::Stats>.
 
 =cut
 
-__PACKAGE__->add_column(
-    id => {
-        data_type => 'int',
-        is_nullable => 0,
-    }
-);
+column id => {
+    data_type => 'int',
+    is_nullable => 0,
+};
 
 =attr guid
 
@@ -100,12 +92,10 @@ L<CPAN::Testers::Schema::Result::Stats>.
 
 =cut
 
-__PACKAGE__->add_column(
-    guid => {
-        data_type => 'char',
-        is_nullable => 0,
-    }
-);
+column guid => {
+    data_type => 'char',
+    is_nullable => 0,
+};
 
 __PACKAGE__->set_primary_key(qw( id guid ));
 
@@ -116,12 +106,10 @@ if the release has been deleted from CPAN and is only on BackPAN.
 
 =cut
 
-__PACKAGE__->add_column(
-    oncpan => {
-        data_type => 'int',
-        is_nullable => 0,
-    }
-);
+column oncpan => {
+    data_type => 'int',
+    is_nullable => 0,
+};
 
 =attr distmat
 
@@ -131,12 +119,10 @@ unindexed by CPAN.
 
 =cut
 
-__PACKAGE__->add_column(
-    distmat => {
-        data_type => 'int',
-        is_nullable => 0,
-    }
-);
+column distmat => {
+    data_type => 'int',
+    is_nullable => 0,
+};
 
 =attr perlmat
 
@@ -145,12 +131,10 @@ a stable release. C<2> if the Perl is a developer release.
 
 =cut
 
-__PACKAGE__->add_column(
-    perlmat => {
-        data_type => 'int',
-        is_nullable => 0,
-    }
-);
+column perlmat => {
+    data_type => 'int',
+    is_nullable => 0,
+};
 
 =attr patched
 
@@ -159,12 +143,10 @@ being patched, C<1> otherwise.
 
 =cut
 
-__PACKAGE__->add_column(
-    patched => {
-        data_type => 'int',
-        is_nullable => 0,
-    }
-);
+column patched => {
+    data_type => 'int',
+    is_nullable => 0,
+};
 
 =attr pass
 
@@ -172,12 +154,10 @@ C<1> if this report's C<state> was C<PASS>.
 
 =cut
 
-__PACKAGE__->add_column(
-    pass => {
-        data_type => 'int',
-        is_nullable => 0,
-    }
-);
+column pass => {
+    data_type => 'int',
+    is_nullable => 0,
+};
 
 =attr fail
 
@@ -185,12 +165,10 @@ C<1> if this report's C<state> was C<FAIL>.
 
 =cut
 
-__PACKAGE__->add_column(
-    fail => {
-        data_type => 'int',
-        is_nullable => 0,
-    }
-);
+column fail => {
+    data_type => 'int',
+    is_nullable => 0,
+};
 
 =attr na
 
@@ -198,12 +176,10 @@ C<1> if this report's C<state> was C<NA>.
 
 =cut
 
-__PACKAGE__->add_column(
-    na => {
-        data_type => 'int',
-        is_nullable => 0,
-    }
-);
+column na => {
+    data_type => 'int',
+    is_nullable => 0,
+};
 
 =attr unknown
 
@@ -211,12 +187,10 @@ C<1> if this report's C<state> was C<UNKNOWN>.
 
 =cut
 
-__PACKAGE__->add_column(
-    unknown => {
-        data_type => 'int',
-        is_nullable => 0,
-    }
-);
+column unknown => {
+    data_type => 'int',
+    is_nullable => 0,
+};
 
 =attr uploadid
 
@@ -224,12 +198,10 @@ The ID of this upload from the `uploads` table.
 
 =cut
 
-__PACKAGE__->add_column(
-    uploadid => {
-        data_type => 'int',
-        is_nullable => 0,
-    }
-);
+column uploadid => {
+    data_type => 'int',
+    is_nullable => 0,
+};
 
 =method upload
 
@@ -238,8 +210,6 @@ L<CPAN::Testers::Schema::Result::Upload>.
 
 =cut
 
-__PACKAGE__->belongs_to(
-    upload => 'CPAN::Testers::Schema::Result::Upload' => 'uploadid',
-);
+belongs_to upload => 'CPAN::Testers::Schema::Result::Upload' => 'uploadid';
 
 1;

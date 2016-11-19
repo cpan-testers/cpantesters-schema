@@ -56,10 +56,8 @@ information about project goals and to get involved.
 
 =cut
 
-use CPAN::Testers::Schema::Base;
-use base 'DBIx::Class::Core';
-
-__PACKAGE__->table( 'uploads' );
+use CPAN::Testers::Schema::Base 'Result';
+table 'uploads';
 
 =attr uploadid
 
@@ -67,14 +65,11 @@ The ID of this upload. Auto-generated.
 
 =cut
 
-__PACKAGE__->add_column(
-    uploadid => {
-        data_type => 'int',
-        is_auto_increment => 1,
-        is_nullable => 0,
-    }
-);
-__PACKAGE__->set_primary_key( 'uploadid' );
+primary_column uploadid => {
+    data_type => 'int',
+    is_auto_increment => 1,
+    is_nullable => 0,
+};
 
 =attr type
 
@@ -99,12 +94,10 @@ but has not yet been seen on CPAN itself.
 
 =cut
 
-__PACKAGE__->add_columns(
-    type => {
-        data_type         => 'varchar',
-        is_nullable       => 0,
-    },
-);
+column type => {
+    data_type         => 'varchar',
+    is_nullable       => 0,
+};
 
 =attr author
 
@@ -112,12 +105,10 @@ The PAUSE ID of the user who uploaded this distribution.
 
 =cut
 
-__PACKAGE__->add_columns(
-    author => {
-        data_type         => 'varchar',
-        is_nullable       => 0,
-    },
-);
+column author => {
+    data_type         => 'varchar',
+    is_nullable       => 0,
+};
 
 =attr dist
 
@@ -126,12 +117,10 @@ L<CPAN::DistnameInfo>.
 
 =cut
 
-__PACKAGE__->add_columns(
-    dist => {
-        data_type         => 'varchar',
-        is_nullable       => 0,
-    },
-);
+column dist => {
+    data_type         => 'varchar',
+    is_nullable       => 0,
+};
 
 =attr version
 
@@ -140,12 +129,10 @@ using L<CPAN::DistnameInfo>.
 
 =cut
 
-__PACKAGE__->add_columns(
-    version => {
-        data_type         => 'varchar',
-        is_nullable       => 0,
-    },
-);
+column version => {
+    data_type         => 'varchar',
+    is_nullable       => 0,
+};
 
 =attr filename
 
@@ -153,12 +140,10 @@ The full file name uploaded to CPAN, without the author directory prefix.
 
 =cut
 
-__PACKAGE__->add_columns(
-    filename => {
-        data_type         => 'varchar',
-        is_nullable       => 0,
-    },
-);
+column filename => {
+    data_type         => 'varchar',
+    is_nullable       => 0,
+};
 
 =attr released
 
@@ -168,11 +153,9 @@ notification message time from the NNTP group.
 
 =cut
 
-__PACKAGE__->add_columns(
-    released => {
-        data_type         => 'bigint',
-        is_nullable       => 0,
-    },
-);
+column released => {
+    data_type         => 'bigint',
+    is_nullable       => 0,
+};
 
 1;
