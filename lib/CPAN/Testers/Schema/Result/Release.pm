@@ -235,4 +235,20 @@ __PACKAGE__->belongs_to(
     upload => 'CPAN::Testers::Schema::Result::Upload' => 'uploadid',
 );
 
+=method report
+
+Get the related row from the `cpanstats` table. See
+L<CPAN::Testers::Schema::Result::Stats>.
+
+This report is the latest report, by date, that went in to this release
+summary. The date field in the report can be used to determine when this
+release was last updated.
+
+=cut
+
+__PACKAGE__->belongs_to(
+    report => 'CPAN::Testers::Schema::Result::Stats',
+    { 'foreign.guid' => 'self.guid' },
+);
+
 1;

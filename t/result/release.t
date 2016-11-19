@@ -44,4 +44,45 @@ subtest 'upload relationship' => sub {
     is $release->upload->uploadid, $upload->uploadid, 'correct upload is related';
 };
 
+subtest 'stats relationship' => sub {
+    my $schema = prepare_temp_schema;
+    my %report = (
+        dist => 'My-Dist',
+        version => '1.000',
+        uploadid => 1,
+        id => 1,
+        guid => '00000000-0000-0000-0000-000000000001',
+        state => 'pass',
+        postdate => '201608',
+        fulldate => '201608120401',
+        tester => 'doug@example.com (Doug Bell)',
+        platform => 'darwin-2level',
+        perl => '5.22.0',
+        osname => 'darwin',
+        osvers => '10.8.0',
+        type => 2,
+    );
+    my $report = $schema->resultset( 'Stats' )->create( \%report );
+
+    my %release = (
+        dist => 'My-Dist',
+        version => '1.000',
+        id => $report->id,
+        guid => $report->guid,
+        oncpan => 1,
+        distmat => 1,
+        perlmat => 1,
+        patched => 1,
+        pass => 35,
+        fail => 1,
+        na => 0,
+        unknown => 0,
+        uploadid => 1,
+    );
+    my $release = $schema->resultset( 'Release' )->create( \%release );
+
+    ok $release->report, 'report relationship exists';
+    is $release->report->guid, $report->guid, 'correct report is related';
+};
+
 done_testing;
