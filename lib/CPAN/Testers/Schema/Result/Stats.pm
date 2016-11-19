@@ -1,6 +1,6 @@
 use utf8;
 package CPAN::Testers::Schema::Result::Stats;
-our $VERSION = '0.002';
+our $VERSION = '0.003';
 # ABSTRACT: The basic statistics information extracted from test reports
 
 =head1 SYNOPSIS
