@@ -18,6 +18,7 @@ my %WriteMakefileArgs = (
   "NAME" => "CPAN::Testers::Schema",
   "PREREQ_PM" => {
     "DBIx::Class" => 0,
+    "DBIx::Class::Candy" => 0,
     "Import::Base" => "0.012",
     "Log::Any" => "1.045",
     "strict" => 0,
@@ -42,6 +43,7 @@ my %WriteMakefileArgs = (
 
 my %FallbackPrereqs = (
   "DBIx::Class" => 0,
+  "DBIx::Class::Candy" => 0,
   "Exporter" => 0,
   "ExtUtils::MakeMaker" => 0,
   "File::Spec" => 0,

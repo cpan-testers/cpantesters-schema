@@ -1,4 +1,5 @@
 requires "DBIx::Class" => "0";
+requires "DBIx::Class::Candy" => "0";
 requires "Import::Base" => "0.012";
 requires "Log::Any" => "1.045";
 requires "perl" => "5.024";
