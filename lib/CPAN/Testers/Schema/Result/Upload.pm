@@ -164,9 +164,41 @@ column released => {
 
 __PACKAGE__->inflate_column(
     released => {
-        deflate => sub { ref $_[0] ? $_[0]->epoch : $_[0] },
-        inflate => sub { DateTime->from_epoch( epoch => $_[0] ) },
+        deflate => sub( $value, $event ) {
+            ref $value ? $value->epoch : $value
+        },
+        inflate => sub( $value, $event ) {
+            DateTime->from_epoch(
+                epoch => $value,
+                time_zone => 'UTC',
+                formatter => 'CPAN::Testers::Schema::DateTime::Formatter',
+            );
+        },
     },
 );
+
+package
+    CPAN::Testers::Schema::DateTime::Formatter {
+    sub format_datetime( $self, $dt ) {
+        # XXX Replace this with DateTime::Format::ISO8601 when
+        # https://github.com/jhoblitt/DateTime-Format-ISO8601/pull/2
+        # is merged
+        my $cldr = $dt->nanosecond % 1000000 ? 'yyyy-MM-ddTHH:mm:ss.SSSSSSSSS'
+                 : $dt->nanosecond ? 'yyyy-MM-ddTHH:mm:ss.SSS'
+                 : 'yyyy-MM-ddTHH:mm:ss';
+
+        my $tz;
+        if ( $dt->time_zone->is_utc ) {
+            $tz = 'Z';
+        }
+        else {
+            my $offset = $dt->time_zone->offset_for_datetime( $dt );
+            $tz = DateTime::TimeZone->offset_as_string( $offset );
+            substr $tz, 3, 0, ':';
+        }
+
+        return $dt->format_cldr( $cldr ) . $tz;
+    }
+}
 
 1;

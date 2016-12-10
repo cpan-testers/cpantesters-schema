@@ -19,7 +19,7 @@ subtest 'create' => sub {
         version => '1.000',
         author => 'PREACTION',
         filename => 'My-Dist-1.000.tar.gz',
-        released => 1366237867,
+        released => 1366237867, # Wed Apr 17 22:31:07 2013
     );
     my $upload = $schema->resultset( 'Upload' )->create( \%upload );
     ok $upload, 'row is created';
@@ -27,6 +27,7 @@ subtest 'create' => sub {
 
     isa_ok $upload->released, 'DateTime', 'released column is auto-inflated to DateTime object';
     is $upload->released->epoch, $upload{ released }, 'datetime is correct';
+    is $upload->released . "", "2013-04-17T22:31:07Z", 'time zone is set correctly';
 };
 
 done_testing;
