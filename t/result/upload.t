@@ -24,6 +24,9 @@ subtest 'create' => sub {
     my $upload = $schema->resultset( 'Upload' )->create( \%upload );
     ok $upload, 'row is created';
     ok $upload->uploadid, 'uploadid is created';
+
+    isa_ok $upload->released, 'DateTime', 'released column is auto-inflated to DateTime object';
+    is $upload->released->epoch, $upload{ released }, 'datetime is correct';
 };
 
 done_testing;

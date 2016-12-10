@@ -57,6 +57,7 @@ information about project goals and to get involved.
 =cut
 
 use CPAN::Testers::Schema::Base 'Result';
+__PACKAGE__->load_components( 'InflateColumn' );
 table 'uploads';
 
 =attr uploadid
@@ -147,15 +148,25 @@ column filename => {
 
 =attr released
 
-The UNIX epoch of the dist release. Calculated from the file's modified
+The date/time of the dist release. Calculated from the file's modified
 time, as synced by the CPAN mirror sync system, or from the upload
 notification message time from the NNTP group.
+
+Inflated from a UNIX epoch into a L<DateTime> object.
 
 =cut
 
 column released => {
     data_type         => 'bigint',
     is_nullable       => 0,
+    inflate_datetime  => 1,
 };
+
+__PACKAGE__->inflate_column(
+    released => {
+        deflate => sub { ref $_[0] ? $_[0]->epoch : $_[0] },
+        inflate => sub { DateTime->from_epoch( epoch => $_[0] ) },
+    },
+);
 
 1;
