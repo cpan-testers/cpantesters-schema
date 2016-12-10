@@ -2,7 +2,19 @@ Changelog for CPAN-Testers-Schema
 
 {{ $NEXT }}
 
+    [Fixed]
+
+    - Properly inflate CPAN upload `released` column into a DateTime
+      object. This makes for a better API so that we can, eventually,
+      change the data type from epoch timestamp to ISO8601 date/time.
+
 0.003     2016-12-09 19:55:09-06:00 America/Chicago
+
+    [Added]
+
+    - Added CPAN uploads data query module
+      (CPAN::Testers::Schema::ResultSet::Upload) to query data from CPAN
+      uploads.
 
     [Other]
 
