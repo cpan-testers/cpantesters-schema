@@ -2,6 +2,8 @@ Changelog for CPAN-Testers-Schema
 
 {{ $NEXT }}
 
+0.004     2016-12-10 02:45:36-06:00 America/Chicago
+
     [Fixed]
 
     - Properly inflate CPAN upload `released` column into a DateTime
