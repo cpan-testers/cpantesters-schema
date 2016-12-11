@@ -2,6 +2,8 @@ Changelog for CPAN-Testers-Schema
 
 {{ $NEXT }}
 
+0.005     2016-12-11 00:36:54-06:00 America/Chicago
+
     [Fixed]
 
     - Fixed dependency declaration for DateTime and
