@@ -4,7 +4,7 @@ CPAN::Testers::Schema - Schema for CPANTesters database processed from test repo
 
 # VERSION
 
-version 0.004
+version 0.005
 
 # STATUS
 

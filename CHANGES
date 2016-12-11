@@ -2,6 +2,11 @@ Changelog for CPAN-Testers-Schema
 
 {{ $NEXT }}
 
+    [Fixed]
+
+    - Fixed dependency declaration for DateTime and
+      DateTime::Format::ISO8601
+
 0.004     2016-12-10 02:45:36-06:00 America/Chicago
 
     [Fixed]
