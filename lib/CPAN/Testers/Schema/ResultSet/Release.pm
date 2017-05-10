@@ -18,16 +18,7 @@ version of a distribution has.
 
 =head1 SEE ALSO
 
-=over
-
-=item L<DBIx::Class::ResultSet>
-
-=item L<CPAN::Testers::Schema>
-
-=item L<http://github.com/cpan-testers/cpantesters-project>
-
-For an overview of how the CPANTesters project works, and for information about
-project goals and to get involved.
+L<DBIx::Class::ResultSet>, L<CPAN::Testers::Schema>
 
 =cut
 

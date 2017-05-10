@@ -35,24 +35,12 @@ C<< dist => version >> pairs in this table. This table does not
 determine which packages were authorized and indexed by PAUSE for
 installation by CPAN clients.
 
+This data is read directly from the local CPAN mirror by
+L<CPAN::Testers::Data::Uploads> and written to this table.
+
 =head1 SEE ALSO
 
-=over 4
-
-=item L<DBIx::Class::Row>
-
-=item L<CPAN::Testers::Schema>
-
-=item L<CPAN::Testers::Data::Uploads>
-
-This module processes the data and writes to this table.
-
-=item L<http://github.com/cpan-testers/cpantesters-project>
-
-For an overview of how the CPANTesters project works, and for
-information about project goals and to get involved.
-
-=back
+L<DBIx::Class::Row>, L<CPAN::Testers::Schema>
 
 =cut
 

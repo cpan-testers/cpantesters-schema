@@ -24,11 +24,7 @@ feature|perlsub/Signatures>.
 
 =head1 SEE ALSO
 
-=over
-
-=item L<Import::Base>
-
-=back
+L<Import::Base>
 
 =cut
 

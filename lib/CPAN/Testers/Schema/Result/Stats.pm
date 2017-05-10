@@ -42,24 +42,11 @@ web application and web APIs.
 
 See C<ATTRIBUTES> below for the full list of attributes.
 
+This data is built from the Metabase by the L<CPAN::Testers::Data::Generator>.
+
 =head1 SEE ALSO
 
-=over 4
-
-=item L<DBIx::Class::Row>
-
-=item L<CPAN::Testers::Schema>
-
-=item L<CPAN::Testers::Data::Generator>
-
-This module processes the data and writes to this table.
-
-=item L<http://github.com/cpan-testers/cpantesters-project>
-
-For an overview of how the CPANTesters project works, and for information about
-project goals and to get involved.
-
-=back
+L<DBIx::Class::Row>, L<CPAN::Testers::Schema>
 
 =cut
 

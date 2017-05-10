@@ -26,18 +26,7 @@ processing, data APIs, and the frontend web application.
 
 =head1 SEE ALSO
 
-=over 4
-
-=item L<CPAN::Testers::Schema::Result::Stats>
-
-=item L<DBIx::Class>
-
-=item L<http://github.com/cpan-testers/cpantesters-project>
-
-For an overview of how the CPANTesters project works, and for information about
-project goals and to get involved.
-
-=back
+L<CPAN::Testers::Schema::Result::Stats>, L<DBIx::Class>
 
 =cut
 

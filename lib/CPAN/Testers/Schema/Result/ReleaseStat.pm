@@ -25,26 +25,7 @@ does not seem necessary and if we can remove it, we should.
 
 =head1 SEE ALSO
 
-=over 4
-
-=item L<DBIx::Class::Row>
-
-=item L<CPAN::Testers::Schema>
-
-=item L<CPAN::Testers::Schema::Result::Release>
-
-These rows are collected into the Release table.
-
-=item L<Labyrinth::Plugin::CPAN::Release>
-
-This module processes the data and writes to this table.
-
-=item L<http://github.com/cpan-testers/cpantesters-project>
-
-For an overview of how the CPANTesters project works, and for
-information about project goals and to get involved.
-
-=back
+L<DBIx::Class::Row>, L<CPAN::Testers::Schema>
 
 =cut
 
