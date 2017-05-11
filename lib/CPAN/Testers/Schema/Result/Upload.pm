@@ -56,6 +56,7 @@ The ID of this upload. Auto-generated.
 
 primary_column uploadid => {
     data_type => 'int',
+    extra     => { unsigned => 1 },
     is_auto_increment => 1,
     is_nullable => 0,
 };

@@ -75,6 +75,7 @@ L<CPAN::Testers::Schema::Result::Stats>.
 
 column guid => {
     data_type => 'char',
+    size => 36,
     is_nullable => 0,
 };
 
@@ -181,6 +182,7 @@ The ID of this upload from the `uploads` table.
 
 column uploadid => {
     data_type => 'int',
+    extra       => { unsigned => 1 },
     is_nullable => 0,
 };
 

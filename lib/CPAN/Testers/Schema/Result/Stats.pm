@@ -73,8 +73,9 @@ representation.
 
 =cut
 
-column 'guid', {
-    data_type   => 'varchar',
+# Must be unique for foreign keys to work
+unique_column 'guid', {
+    data_type   => 'char',
     is_nullable => 0,
     size        => 36,
 };
