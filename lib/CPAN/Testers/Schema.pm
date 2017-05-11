@@ -31,9 +31,14 @@ L<CPAN::Testers::Schema::Result::Stats>, L<DBIx::Class>
 =cut
 
 use CPAN::Testers::Schema::Base;
+use File::Share qw( dist_dir );
+use Path::Tiny qw( path );
+use List::Util qw( uniq );
 use base 'DBIx::Class::Schema';
 
 __PACKAGE__->load_namespaces;
+__PACKAGE__->load_components(qw/Schema::Versioned/);
+__PACKAGE__->upgrade_directory( dist_dir( 'CPAN-Testers-Schema' ) );
 
 =method connect_from_config
 
@@ -68,6 +73,23 @@ sub connect_from_config ( $class ) {
         },
     );
     return $schema;
+}
+
+=method ordered_schema_versions
+
+Get the available schema versions by reading the files in the share
+directory. These versions can then be upgraded to using the
+L<cpantesters-schema> script.
+
+=cut
+
+sub ordered_schema_versions( $self ) {
+    my @versions =
+        uniq sort
+        map { /[\d.]+-([\d.]+)/ }
+        grep { /CPAN-Testers-Schema-[\d.]+-[\d.]+-MySQL[.]sql/ }
+        path( dist_dir( 'CPAN-Testers-Schema' ) )->children;
+    return '0.000', @versions;
 }
 
 1;
