@@ -1,5 +1,6 @@
 requires "DBIx::Class" => "0";
 requires "DBIx::Class::Candy" => "0";
+requires "DBIx::Class::InflateColumn::Serializer" => "0.09";
 requires "DateTime" => "0";
 requires "DateTime::Format::ISO8601" => "0";
 requires "File::Share" => "0";

@@ -26,6 +26,8 @@ use Data::UUID;
 use DateTime;
 table 'test_report';
 
+__PACKAGE__->load_components('InflateColumn::Serializer', 'Core');
+
 =attr id
 
 The UUID of this report stored in standard hex string representation.
@@ -60,8 +62,10 @@ format on http://api.cpantesters.org
 =cut
 
 column 'report', {
-    data_type => 'JSON',
-    is_nullable => 0,
+    data_type            => 'JSON',
+    is_nullable          => 0,
+    'serializer_class'   => 'JSON',
+    'serializer_options' => { allow_blessed => 1, convert_blessed => 1 }
 };
 
 =method new
