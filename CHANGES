@@ -2,6 +2,19 @@ Changelog for CPAN-Testers-Schema
 
 {{ $NEXT }}
 
+    [Added]
+
+    - Add a "created" field to the TestReport table to keep track of
+      when the test report was created
+    - Auto serialize the TestReport to/from JSON
+    - Add the ID and created date/time to the JSON test report
+    - Add a table to hold the old Metabase user information so we can
+      find name/email for legacy clients
+    - Add a conversion method from Metabase::Fact to the new test
+      report. This allows legacy clients to send in Metabase reports and
+      be updated to the new test report format.
+
+
 0.006     2017-05-12 10:02:58+02:00 Europe/Paris
 
     [Added]
