@@ -43,6 +43,8 @@ a UUID prefixed with C<metabase:user:>.
 =cut
 
 column resource => {
+    data_type => 'char',
+    size => 50,
     is_nullable => 0,
 };
 

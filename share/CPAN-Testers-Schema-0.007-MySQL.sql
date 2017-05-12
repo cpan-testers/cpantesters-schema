@@ -11,7 +11,7 @@ DROP TABLE IF EXISTS `metabase_user`;
 --
 CREATE TABLE `metabase_user` (
   `id` integer NOT NULL auto_increment,
-  `resource`  NOT NULL,
+  `resource`  char(50) NOT NULL,
   `fullname` varchar(255) NOT NULL,
   `email` varchar(255) NULL,
   INDEX `ix_resource` (`resource`),

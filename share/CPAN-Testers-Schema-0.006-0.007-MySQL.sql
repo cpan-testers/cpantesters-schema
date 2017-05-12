@@ -6,7 +6,7 @@ SET foreign_key_checks=0;
 
 CREATE TABLE `metabase_user` (
   `id` integer NOT NULL auto_increment,
-  `resource`  NOT NULL,
+  `resource` CHAR(50) NOT NULL,
   `fullname` varchar(255) NOT NULL,
   `email` varchar(255) NULL,
   INDEX `ix_resource` (`resource`),
