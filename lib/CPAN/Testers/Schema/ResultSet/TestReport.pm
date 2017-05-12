@@ -20,6 +20,8 @@ L<CPAN::Testers::Schema>
 =cut
 
 use CPAN::Testers::Schema::Base 'ResultSet';
+use Scalar::Util qw( blessed );
+use JSON::MaybeXS qw( encode_json );
 
 =method insert_metabase_fact
 
@@ -32,8 +34,47 @@ APIs.
 =cut
 
 sub insert_metabase_fact( $self, $fact ) {
-    return $self->insert({
+    my ( $fact_report ) = grep { blessed $_ eq 'CPAN::Testers::Fact::LegacyReport' } $fact->content->@*;
+    my %fact_data = (
+        $fact_report->content->%*,
+        $fact->core_metadata->%{qw( creation_time guid )},
+        $fact->core_metadata->{resource}->metadata->%{qw( dist_name dist_version dist_file cpan_id )},
+    );
+
+    my $user_id = $fact->core_metadata->{creator}->resource;
+    my ( $metabase_user ) = $self->result_source->schema->resultset( 'MetabaseUser' )
+        ->search( { resource => $user_id }, { order_by => '-id', limit => 1 } )->all;
+
+    my %report = (
+        reporter => {
+            name => $metabase_user->fullname,
+            email => $metabase_user->email,
+        },
+        environment => {
+            system => {
+                osname => $fact_data{osname},
+                osversion => $fact_data{osversion},
+            },
+            language => {
+                name => "Perl 5",
+                version => $fact_data{perl_version},
+                archname => $fact_data{archname},
+            },
+        },
+        distribution => {
+            name => $fact_data{dist_name},
+            version => $fact_data{dist_version},
+            grade => $fact_data{grade},
+            output => {
+                uncategorized => $fact_data{textreport},
+            },
+        },
+    );
+
+    return $self->create({
         id => $fact->guid,
+        created => $fact->creation_time,
+        report => encode_json( \%report ),
     });
 }
 
