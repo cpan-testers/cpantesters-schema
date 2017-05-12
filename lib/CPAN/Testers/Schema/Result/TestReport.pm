@@ -22,6 +22,7 @@ L<DBIx::Class::Row>, L<CPAN::Testers::Schema>
 =cut
 
 use CPAN::Testers::Schema::Base 'Result';
+use Data::UUID;
 table 'test_report';
 
 =attr id
@@ -60,6 +61,23 @@ format on http://api.cpantesters.org
 
 column 'report', {
     data_type => 'JSON',
+    is_nullable => 0,
+};
+
+=method new
+
+Create a new object. This is called automatically by the ResultSet
+object and should not be called directly.
+
+This is overridden to provide sane defaults for the C<id> and C<created>
+fields.
+
+=cut
+
+sub new( $class, $attrs ) {
+    $attrs->{id} ||= Data::UUID->new->create_str;
+    $attrs->{created} ||= time;
+    return $class->next::method( $attrs );
 };
 
 1;
