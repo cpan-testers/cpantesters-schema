@@ -9,6 +9,8 @@ Changelog for CPAN-Testers-Schema
     - TestReport table for storing new test reports as JSON documents
     - cpantesters-schema script for deploying the new database schema
       [Github #2]
+    - Add `updated` column to raw test reports to keep track of when
+      they were updated
 
     [Fixed]
 

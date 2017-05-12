@@ -36,6 +36,19 @@ primary_column 'id', {
     is_nullable => 0,
 };
 
+=attr created
+
+The UNIX timestamp of when the report was inserted into the database.
+Will default to the current time.
+
+=cut
+
+column created => {
+    data_type => 'timestamp',
+    is_nullable => 0,
+    default_value => 0,
+};
+
 =attr report
 
 The full JSON report.
