@@ -21,7 +21,6 @@ L<CPAN::Testers::Schema>
 
 use CPAN::Testers::Schema::Base 'ResultSet';
 use Scalar::Util qw( blessed );
-use JSON::MaybeXS qw( encode_json );
 
 =method insert_metabase_fact
 
@@ -74,7 +73,7 @@ sub insert_metabase_fact( $self, $fact ) {
     return $self->create({
         id => $fact->guid,
         created => $fact->creation_time,
-        report => encode_json( \%report ),
+        report => \%report,
     });
 }
 

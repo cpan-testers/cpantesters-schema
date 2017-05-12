@@ -60,7 +60,7 @@ subtest 'insert_metabase_fact' => sub {
         },
     };
     my $row = $schema->resultset( 'TestReport' )->insert_metabase_fact( $given_report );
-    is_deeply decode_json($row->report), $expect_report, 'Metabase::Fact is converted correctly';
+    is_deeply $row->report, $expect_report, 'Metabase::Fact is converted correctly';
 };
 
 done_testing;
