@@ -4,7 +4,7 @@ CPAN::Testers::Schema - Schema for CPANTesters database processed from test repo
 
 # VERSION
 
-version 0.005
+version 0.006
 
 # STATUS
 
@@ -49,14 +49,15 @@ in `$HOME/.cpanstats.cnf`. This configuration file should look like:
 
 See ["mysql\_read\_default\_file" in DBD::mysql](https://metacpan.org/pod/DBD::mysql#mysql_read_default_file).
 
+## ordered\_schema\_versions
+
+Get the available schema versions by reading the files in the share
+directory. These versions can then be upgraded to using the
+[cpantesters-schema](https://metacpan.org/pod/cpantesters-schema) script.
+
 # SEE ALSO
 
-- [CPAN::Testers::Schema::Result::Stats](https://metacpan.org/pod/CPAN::Testers::Schema::Result::Stats)
-- [DBIx::Class](https://metacpan.org/pod/DBIx::Class)
-- [http://github.com/cpan-testers/cpantesters-project](http://github.com/cpan-testers/cpantesters-project)
-
-    For an overview of how the CPANTesters project works, and for information about
-    project goals and to get involved.
+[CPAN::Testers::Schema::Result::Stats](https://metacpan.org/pod/CPAN::Testers::Schema::Result::Stats), [DBIx::Class](https://metacpan.org/pod/DBIx::Class)
 
 # AUTHORS
 

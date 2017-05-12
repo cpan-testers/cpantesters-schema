@@ -2,6 +2,18 @@ Changelog for CPAN-Testers-Schema
 
 {{ $NEXT }}
 
+    [Added]
+
+    - TestReport table for storing new test reports as JSON documents
+    - cpantesters-schema script for deploying the new database schema
+      [Github #2]
+
+    [Fixed]
+
+    - Fixed all the MySQL foreign key constraints. Foreign key columns
+      need to be exactly the same column type as their foreign
+      counterpart.
+
 0.005     2016-12-11 00:36:54-06:00 America/Chicago
 
     [Fixed]
