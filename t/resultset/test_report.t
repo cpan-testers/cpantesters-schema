@@ -60,7 +60,15 @@ subtest 'insert_metabase_fact' => sub {
         },
     };
     my $row = $schema->resultset( 'TestReport' )->insert_metabase_fact( $given_report );
-    is_deeply $row->report, $expect_report, 'Metabase::Fact is converted correctly';
+
+    my $got_report = $row->report;
+    my $id = delete $got_report->{id};
+    is $id, $given_report->core_metadata->{guid}, 'id is correct';
+
+    my $created = delete $got_report->{created};
+    is $created, $given_report->core_metadata->{creation_time};
+
+    is_deeply $got_report, $expect_report, 'Metabase::Fact is converted correctly';
 };
 
 done_testing;

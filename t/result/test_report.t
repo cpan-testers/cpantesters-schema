@@ -20,6 +20,8 @@ subtest 'column defaults' => sub {
         'GUID is created automatically';
     like $row->created, qr{\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z},
         'row created in Y-M-DTH:M:S';
+    is $row->report->{id}, $row->id, 'id field added to report';
+    is $row->report->{created}, $row->created, 'created field added to report';
 };
 
 done_testing;

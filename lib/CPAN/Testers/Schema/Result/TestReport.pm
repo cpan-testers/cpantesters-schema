@@ -79,8 +79,8 @@ fields.
 =cut
 
 sub new( $class, $attrs ) {
-    $attrs->{id} ||= Data::UUID->new->create_str;
-    $attrs->{created} ||= DateTime->now( time_zone => 'UTC' )->datetime . 'Z';
+    $attrs->{report}{id} = $attrs->{id} ||= Data::UUID->new->create_str;
+    $attrs->{report}{created} = $attrs->{created} ||= DateTime->now( time_zone => 'UTC' )->datetime . 'Z';
     return $class->next::method( $attrs );
 };
 
