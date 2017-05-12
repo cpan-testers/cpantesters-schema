@@ -1,8 +1,22 @@
 -- 
 -- Created by SQL::Translator::Producer::MySQL
--- Created on Fri May 12 13:43:10 2017
+-- Created on Fri May 12 15:12:24 2017
 -- 
 SET foreign_key_checks=0;
+
+DROP TABLE IF EXISTS `metabase_user`;
+
+--
+-- Table: `metabase_user`
+--
+CREATE TABLE `metabase_user` (
+  `id` integer NOT NULL auto_increment,
+  `resource`  NOT NULL,
+  `fullname` varchar(255) NOT NULL,
+  `email` varchar(255) NULL,
+  INDEX `ix_resource` (`resource`),
+  PRIMARY KEY (`id`)
+);
 
 DROP TABLE IF EXISTS `test_report`;
 

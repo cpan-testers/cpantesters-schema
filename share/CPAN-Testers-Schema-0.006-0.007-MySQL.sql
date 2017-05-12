@@ -2,6 +2,19 @@
 
 BEGIN;
 
+SET foreign_key_checks=0;
+
+CREATE TABLE `metabase_user` (
+  `id` integer NOT NULL auto_increment,
+  `resource`  NOT NULL,
+  `fullname` varchar(255) NOT NULL,
+  `email` varchar(255) NULL,
+  INDEX `ix_resource` (`resource`),
+  PRIMARY KEY (`id`)
+);
+
+SET foreign_key_checks=1;
+
 ALTER TABLE test_report ADD COLUMN created datetime NOT NULL;
 
 
