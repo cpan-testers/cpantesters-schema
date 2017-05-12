@@ -23,6 +23,7 @@ L<DBIx::Class::Row>, L<CPAN::Testers::Schema>
 
 use CPAN::Testers::Schema::Base 'Result';
 use Data::UUID;
+use DateTime;
 table 'test_report';
 
 =attr id
@@ -39,15 +40,14 @@ primary_column 'id', {
 
 =attr created
 
-The UNIX timestamp of when the report was inserted into the database.
+The ISO8601 date/time of when the report was inserted into the database.
 Will default to the current time.
 
 =cut
 
 column created => {
-    data_type => 'timestamp',
+    data_type => 'datetime',
     is_nullable => 0,
-    default_value => 0,
 };
 
 =attr report
@@ -76,7 +76,7 @@ fields.
 
 sub new( $class, $attrs ) {
     $attrs->{id} ||= Data::UUID->new->create_str;
-    $attrs->{created} ||= time;
+    $attrs->{created} ||= DateTime->now( time_zone => 'UTC' )->datetime . 'Z';
     return $class->next::method( $attrs );
 };
 

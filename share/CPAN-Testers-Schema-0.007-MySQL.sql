@@ -1,6 +1,6 @@
 -- 
 -- Created by SQL::Translator::Producer::MySQL
--- Created on Fri May 12 12:43:49 2017
+-- Created on Fri May 12 13:43:10 2017
 -- 
 SET foreign_key_checks=0;
 
@@ -11,7 +11,7 @@ DROP TABLE IF EXISTS `test_report`;
 --
 CREATE TABLE `test_report` (
   `id` char(36) NOT NULL,
-  `created` timestamp NOT NULL DEFAULT '0',
+  `created` datetime NOT NULL,
   `report` JSON NOT NULL,
   PRIMARY KEY (`id`)
 );

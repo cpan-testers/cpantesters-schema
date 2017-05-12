@@ -18,8 +18,8 @@ subtest 'column defaults' => sub {
     my $row = $schema->resultset( 'TestReport' )->create( { report => '{}' } );
     like $row->id, qr{${HEX}{8}-${HEX}{4}-${HEX}{4}-${HEX}{4}-${HEX}{12}},
         'GUID is created automatically';
-    ok looks_like_number $row->created, 'created timestamp looks like number';
-    cmp_ok $row->created, '>', time-60, 'was created in the last 60 seconds';
+    like $row->created, qr{\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z},
+        'row created in Y-M-DTH:M:S';
 };
 
 done_testing;

@@ -2,7 +2,7 @@
 
 BEGIN;
 
-ALTER TABLE test_report ADD COLUMN created timestamp NOT NULL DEFAULT '0';
+ALTER TABLE test_report ADD COLUMN created datetime NOT NULL;
 
 
 COMMIT;
