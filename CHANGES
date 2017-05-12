@@ -2,6 +2,8 @@ Changelog for CPAN-Testers-Schema
 
 {{ $NEXT }}
 
+0.006     2017-05-12 10:02:58+02:00 Europe/Paris
+
     [Added]
 
     - TestReport table for storing new test reports as JSON documents
