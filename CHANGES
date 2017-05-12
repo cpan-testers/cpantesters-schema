@@ -2,6 +2,8 @@ Changelog for CPAN-Testers-Schema
 
 {{ $NEXT }}
 
+0.007     2017-05-12 17:52:23+02:00 Europe/Paris
+
     [Added]
 
     - Add a "created" field to the TestReport table to keep track of
