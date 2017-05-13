@@ -1,6 +1,6 @@
 use utf8;
 package CPAN::Testers::Schema::Result::Release;
-our $VERSION = '0.009';
+our $VERSION = '0.010';
 # ABSTRACT: Collected test report stats about a single CPAN release
 
 =head1 SYNOPSIS

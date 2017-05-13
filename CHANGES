@@ -2,6 +2,8 @@ Changelog for CPAN-Testers-Schema
 
 {{ $NEXT }}
 
+0.009     2017-05-13 14:42:38+02:00 Europe/Paris
+
     [Fixed]
 
     - Changed Metabase -> TestReport migration for new test report
