@@ -2,6 +2,16 @@ Changelog for CPAN-Testers-Schema
 
 {{ $NEXT }}
 
+    [Fixed]
+
+    - Updated metabase users table to add unique constraint to user
+      GUID. The source table has multiple mappings for a single user,
+      but as @bingos pointed out: This means that some e-mails for
+      a user are completely inaccurate, bordering on malicious (since
+      authors cannot get in touch with testers). The new table has only
+      one mapping per GUID, and we can then update that mapping if
+      a tester complains.
+
 0.007     2017-05-12 17:52:23+02:00 Europe/Paris
 
     [Added]
