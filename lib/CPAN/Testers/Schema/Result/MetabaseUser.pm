@@ -42,16 +42,11 @@ a UUID prefixed with C<metabase:user:>.
 
 =cut
 
-column resource => {
+unique_column resource => {
     data_type => 'char',
     size => 50,
     is_nullable => 0,
 };
-
-sub sqlt_deploy_hook {
-    my ($self, $sqlt_table) = @_;
-    $sqlt_table->add_index(name => 'ix_resource', fields => [qw( resource )]);
-}
 
 =attr fullname
 
