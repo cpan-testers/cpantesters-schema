@@ -2,6 +2,8 @@ Changelog for CPAN-Testers-Schema
 
 {{ $NEXT }}
 
+0.008     2017-05-13 10:53:47+02:00 Europe/Paris
+
     [Fixed]
 
     - Updated metabase users table to add unique constraint to user

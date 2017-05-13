@@ -1,5 +1,5 @@
 package CPAN::Testers::Schema::Result::TestReport;
-our $VERSION = '0.008';
+our $VERSION = '0.009';
 # ABSTRACT: Raw reports as JSON documents
 
 =head1 SYNOPSIS
