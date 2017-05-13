@@ -2,6 +2,11 @@ Changelog for CPAN-Testers-Schema
 
 {{ $NEXT }}
 
+    [Fixed]
+
+    - Changed Metabase -> TestReport migration for new test report
+      format, which moves the test result into a top-level "result" key.
+
 0.008     2017-05-13 10:53:47+02:00 Europe/Paris
 
     [Fixed]
