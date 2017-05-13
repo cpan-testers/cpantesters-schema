@@ -63,11 +63,13 @@ sub insert_metabase_fact( $self, $fact ) {
         distribution => {
             name => $fact_data{dist_name},
             version => $fact_data{dist_version},
-            grade => $fact_data{grade},
+        },
+        result => {
+            grade => lc $fact_data{grade},
             output => {
                 uncategorized => $fact_data{textreport},
             },
-        },
+        }
     );
 
     return $self->create({

@@ -53,6 +53,8 @@ subtest 'insert_metabase_fact' => sub {
         distribution => {
             name => 'Foo-Bar',
             version => '1.24',
+        },
+        result => {
             grade => 'pass',
             output => {
                 uncategorized => 'Test output',
