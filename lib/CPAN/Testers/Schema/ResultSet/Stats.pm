@@ -56,7 +56,7 @@ sub insert_test_report ( $self, $report ) {
 
     my $stat = {
         guid => $guid,
-        state => lc($data->{results}{grade}),
+        state => lc($data->{result}{grade}),
         postdate => $created->strftime('%Y%m'),
         tester => qq["$data->{reporter}{name}" <$data->{reporter}{email}>],
         dist => $data->{distribution}{name},
