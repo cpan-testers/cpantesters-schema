@@ -2,6 +2,13 @@ Changelog for CPAN-Testers-Schema
 
 {{ $NEXT }}
 
+    [Fixed]
+
+    - Fixed date/time format handling for TestReport created field. We
+      need to make sure that the date/time is formatted correctly for
+      the given database engine. The "created" date/time in the report
+      is always a full ISO8601 date/time.
+
 0.009     2017-05-13 14:42:38+02:00 Europe/Paris
 
     [Fixed]
