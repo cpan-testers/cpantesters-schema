@@ -2,6 +2,8 @@ Changelog for CPAN-Testers-Schema
 
 {{ $NEXT }}
 
+0.011     2017-05-14 15:50:18+02:00 Europe/Paris
+
     [Added]
 
     - Added cpantesters-schema install to custom DSN. This allows me to
