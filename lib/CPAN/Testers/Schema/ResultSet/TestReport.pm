@@ -72,9 +72,12 @@ sub insert_metabase_fact( $self, $fact ) {
         }
     );
 
+    my $format = DateTime::Format::ISO8601->new();
+    my $creation = $format->parse_datetime( $fact->creation_time );
+
     return $self->create({
         id => $fact->guid,
-        created => $fact->creation_time,
+        created => $creation,
         report => \%report,
     });
 }

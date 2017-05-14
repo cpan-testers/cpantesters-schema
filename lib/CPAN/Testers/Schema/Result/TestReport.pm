@@ -26,7 +26,7 @@ use Data::UUID;
 use DateTime;
 table 'test_report';
 
-__PACKAGE__->load_components('InflateColumn::Serializer', 'Core');
+__PACKAGE__->load_components('InflateColumn::Serializer', 'InflateColumn::DateTime', 'Core');
 
 =attr id
 
@@ -50,6 +50,7 @@ Will default to the current time.
 column created => {
     data_type => 'datetime',
     is_nullable => 0,
+    format_datetime => 1,
 };
 
 =attr report
@@ -80,7 +81,8 @@ fields.
 
 sub new( $class, $attrs ) {
     $attrs->{report}{id} = $attrs->{id} ||= Data::UUID->new->create_str;
-    $attrs->{report}{created} = $attrs->{created} ||= DateTime->now( time_zone => 'UTC' )->datetime . 'Z';
+    $attrs->{created} ||= DateTime->now( time_zone => 'UTC' );
+    $attrs->{report}{created} = $attrs->{created}->datetime . 'Z';
     return $class->next::method( $attrs );
 };
 
