@@ -2,6 +2,15 @@ Changelog for CPAN-Testers-Schema
 
 {{ $NEXT }}
 
+    [Fixed]
+
+    - Fixed upgrade for brand-new SQLite databases
+
+    [Added]
+
+    - Added a method to translate from test report JSON documents to the
+      main Stats table. Thanks @jberger!
+
 0.011     2017-05-14 15:50:18+02:00 Europe/Paris
 
     [Added]

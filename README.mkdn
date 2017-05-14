@@ -4,7 +4,7 @@ CPAN::Testers::Schema - Schema for CPANTesters database processed from test repo
 
 # VERSION
 
-version 0.011
+version 0.012
 
 # STATUS
 
@@ -64,9 +64,10 @@ directory. These versions can then be upgraded to using the
 - Oriol Soriano <oriolsoriano@gmail.com>
 - Doug Bell <preaction@cpan.org>
 
-# CONTRIBUTOR
+# CONTRIBUTORS
 
-Breno G. de Oliveira <garu@cpan.org>
+- Breno G. de Oliveira <garu@cpan.org>
+- Joel Berger <joel.a.berger@gmail.com>
 
 # COPYRIGHT AND LICENSE
 
