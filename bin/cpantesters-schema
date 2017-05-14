@@ -77,6 +77,9 @@ sub prepare {
     my $sql_dir = dist_dir( 'CPAN-Testers-Schema' );
     my $version = $schema->schema_version();
     $schema->create_ddl_dir( 'MySQL', $version, $sql_dir, $preversion );
+
+    $schema = CPAN::Testers::Schema->connect( 'dbi:SQLite::memory:' );
+    $schema->create_ddl_dir( 'SQLite', $version, $sql_dir, $preversion );
 }
 
 sub check {
