@@ -2,6 +2,11 @@ Changelog for CPAN-Testers-Schema
 
 {{ $NEXT }}
 
+    [Added]
+
+    - Added cpantesters-schema install to custom DSN. This allows me to
+      build a custom SQLite database for local testing.
+
 0.010     2017-05-14 10:30:48+02:00 Europe/Paris
 
     [Fixed]
