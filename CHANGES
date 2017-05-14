@@ -2,6 +2,8 @@ Changelog for CPAN-Testers-Schema
 
 {{ $NEXT }}
 
+0.010     2017-05-14 10:30:48+02:00 Europe/Paris
+
     [Fixed]
 
     - Fixed date/time format handling for TestReport created field. We
