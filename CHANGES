@@ -2,6 +2,10 @@ Changelog for CPAN-Testers-Schema
 
 {{ $NEXT }}
 
+    [Added]
+
+    - Added a method to get the CPAN upload from a test report
+
 0.012     2017-05-14 15:56:39+02:00 Europe/Paris
 
     [Fixed]
