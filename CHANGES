@@ -2,6 +2,12 @@ Changelog for CPAN-Testers-Schema
 
 {{ $NEXT }}
 
+0.013     2017-05-26 22:48:55-05:00 America/Chicago
+
+    [Added]
+
+    - Added a method to get the CPAN upload from a test report
+
 0.012     2017-05-14 15:56:39+02:00 Europe/Paris
 
     [Fixed]
@@ -12,7 +18,6 @@ Changelog for CPAN-Testers-Schema
 
     - Added a method to translate from test report JSON documents to the
       main Stats table. Thanks @jberger!
-    - Added a method to get the CPAN upload from a test report
 
 0.011     2017-05-14 15:50:18+02:00 Europe/Paris
 
