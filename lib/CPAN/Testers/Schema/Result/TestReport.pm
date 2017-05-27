@@ -86,4 +86,19 @@ sub new( $class, $attrs ) {
     return $class->next::method( $attrs );
 };
 
+=method upload
+
+    my $upload = $row->upload;
+
+Get the associated L<CPAN::Testers::Schema::Result::Upload> object for
+the distribution tested by this test report.
+
+=cut
+
+sub upload( $self ) {
+    my ( $dist, $vers ) = $self->report->{distribution}->@{qw( name version )};
+    return $self->result_source->schema->resultset( 'Upload' )
+        ->search({ dist => $dist, version => $vers })->single;
+}
+
 1;
