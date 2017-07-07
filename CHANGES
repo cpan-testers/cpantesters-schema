@@ -2,6 +2,11 @@ Changelog for CPAN-Testers-Schema
 
 {{ $NEXT }}
 
+    [Added]
+
+    - Added method to search full test reports for language,
+      distribution, and version
+
 0.013     2017-05-26 22:48:55-05:00 America/Chicago
 
     [Added]

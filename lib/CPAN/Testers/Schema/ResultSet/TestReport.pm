@@ -22,6 +22,31 @@ L<CPAN::Testers::Schema>
 use CPAN::Testers::Schema::Base 'ResultSet';
 use Scalar::Util qw( blessed );
 
+=method dist
+
+    my $rs = $rs->dist( 'Perl 5', 'CPAN-Testers-Schema' );
+    my $rs = $rs->dist( 'Perl 5', 'CPAN-Testers-Schema', '0.012' );
+
+Fetch reports only for the given distribution, optionally for the given
+version. Returns a new C<CPAN::Testers::Schema::ResultSet::TestReport>
+object that will only return reports with the given data.
+
+This can be used to scan the full reports for specific data.
+
+=cut
+
+sub dist( $self, $lang, $dist, $version=undef ) {
+    return $self->search( {
+        'report' => [ -and =>
+            \[ "->> '\$.environment.language.name'=?", $lang ],
+            \[ "->> '\$.distribution.name'=?", $dist ],
+            ( defined $version ? (
+                \[ "->> '\$.distribution.version'=?", $version ],
+            ) : () ),
+        ],
+    } );
+}
+
 =method insert_metabase_fact
 
     my $row = $rs->insert_metabase_fact( $fact );
