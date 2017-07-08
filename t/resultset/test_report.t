@@ -89,7 +89,15 @@ subtest 'dist() - fetch reports by language/dist' => sub {
         },
     );
     if ( !$mysqld ) {
-        plan skip_all => $Test::mysqld::errstr;
+        plan skip_all => "Failed to start up server: $Test::mysqld::errstr";
+        return;
+    }
+
+    my ( undef, $version ) = DBI->connect( $mysqld->dsn(dbname => 'test') )->selectrow_array( q{SHOW VARIABLES LIKE 'version'} );
+    my ( $mversion ) = $version =~ /^(\d+[.]\d+)/;
+    diag "MySQL version: $version; Major version: $mversion";
+    if ( $mversion < 5.7 ) {
+        plan skip_all => "Need MySQL version 5.7 or higher. This is $version";
         return;
     }
 
