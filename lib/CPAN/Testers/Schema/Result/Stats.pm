@@ -138,7 +138,7 @@ the tester's name as a comment (C<doug@example.com (Doug Bell)>).
 column 'tester', {
     data_type   => 'varchar',
     is_nullable => 0,
-    size        => 100,
+    size        => 255,
 };
 
 =attr dist
@@ -150,7 +150,7 @@ The distribution that was tested.
 column 'dist', {
     data_type   => 'varchar',
     is_nullable => 0,
-    size        => 100,
+    size        => 255,
 };
 
 =attr version
@@ -162,7 +162,7 @@ The version of the distribution.
 column 'version', {
     data_type   => 'varchar',
     is_nullable => 0,
-    size        => 20,
+    size        => 255,
 };
 
 =attr platform
@@ -174,7 +174,7 @@ The Perl C<platform> string (from C<$Config{archname}>).
 column 'platform',  {
     data_type   => 'varchar',
     is_nullable => 0,
-    size        => 20,
+    size        => 255,
 };
 
 =attr perl
@@ -187,7 +187,7 @@ C<$Config{version}>).
 column 'perl',  {
     data_type   => 'varchar',
     is_nullable => 0,
-    size        => 10,
+    size        => 255,
 };
 
 =attr osname
@@ -199,7 +199,7 @@ The name of the operating system (from C<$Config{osname}>).
 column 'osname',  {
     data_type   => 'varchar',
     is_nullable => 0,
-    size        => 20,
+    size        => 255,
 };
 
 =attr osvers
@@ -211,7 +211,7 @@ The version of the operating system (from C<$Config{osvers}>).
 column 'osvers',  {
     data_type   => 'varchar',
     is_nullable => 0,
-    size        => 20,
+    size        => 255,
 };
 
 =attr fulldate
@@ -222,9 +222,9 @@ format.
 =cut
 
 column 'fulldate', {
-    data_type   => 'char',
+    data_type   => 'varchar',
     is_nullable => 0,
-    size        => 8,
+    size        => 32,
 };
 
 =attr type

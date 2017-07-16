@@ -2,6 +2,13 @@ Changelog for CPAN-Testers-Schema
 
 {{ $NEXT }}
 
+    [Fixed]
+
+    - Fixed old schema version with incorrect size of field. Since these
+      old tables aren't put through an ALTER TABLE process, we can edit
+      the original versions without triggering an upgrade. This means we
+      can do minor adjustments to match reality without major problems.
+
 0.015     2017-07-08 12:07:35-05:00 America/Chicago
 
     [Fixed]

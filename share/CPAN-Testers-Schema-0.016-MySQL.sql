@@ -1,6 +1,6 @@
 -- 
 -- Created by SQL::Translator::Producer::MySQL
--- Created on Sat Jul  8 12:42:36 2017
+-- Created on Sat Jul 15 22:49:04 2017
 -- 
 SET foreign_key_checks=0;
 
@@ -56,14 +56,14 @@ CREATE TABLE `cpanstats` (
   `guid` char(36) NOT NULL,
   `state` enum('pass', 'fail', 'unknown', 'na') NOT NULL,
   `postdate` mediumint unsigned NOT NULL,
-  `tester` varchar(100) NOT NULL,
-  `dist` varchar(100) NOT NULL,
-  `version` varchar(20) NOT NULL,
-  `platform` varchar(20) NOT NULL,
-  `perl` varchar(10) NOT NULL,
-  `osname` varchar(20) NOT NULL,
-  `osvers` varchar(20) NOT NULL,
-  `fulldate` char(8) NOT NULL,
+  `tester` varchar(255) NOT NULL,
+  `dist` varchar(255) NOT NULL,
+  `version` varchar(255) NOT NULL,
+  `platform` varchar(255) NOT NULL,
+  `perl` varchar(255) NOT NULL,
+  `osname` varchar(255) NOT NULL,
+  `osvers` varchar(255) NOT NULL,
+  `fulldate` varchar(32) NOT NULL,
   `type` tinyint unsigned NOT NULL,
   `uploadid` integer unsigned NOT NULL,
   INDEX `cpanstats_idx_uploadid` (`uploadid`),
