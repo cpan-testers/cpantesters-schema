@@ -234,13 +234,9 @@ possibilities are:
 
 =over 4
 
-=item 2
+=item 2 - This is a valid Perl 5 test report
 
-This is a valid Perl 5 test report
-
-=item 3
-
-This report was marked invalid by a user
+=item 3 - This report was marked invalid by a user
 
 =back
 
