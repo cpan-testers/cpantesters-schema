@@ -2,6 +2,14 @@ Changelog for CPAN-Testers-Schema
 
 {{ $NEXT }}
 
+    [Fixed]
+
+    - Fixed some POD formatting issues in the Stats result class. Thanks
+      @manwar!
+
+    - Added the correct dependency declaration for Data::UUID, which was
+      causing Travis tests to fail. Thanks @manwar!
+
 0.016     2017-08-03 21:38:38-05:00 America/Chicago
 
     [Fixed]
