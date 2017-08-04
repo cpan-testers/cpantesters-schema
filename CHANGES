@@ -2,6 +2,8 @@ Changelog for CPAN-Testers-Schema
 
 {{ $NEXT }}
 
+0.016     2017-08-03 21:38:38-05:00 America/Chicago
+
     [Fixed]
 
     - Fixed old schema version with incorrect size of field. Since these
