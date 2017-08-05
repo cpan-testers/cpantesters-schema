@@ -4,7 +4,7 @@ CPAN::Testers::Schema - Schema for CPANTesters database processed from test repo
 
 # VERSION
 
-version 0.017
+version 0.018
 
 # STATUS
 
@@ -72,7 +72,7 @@ directory. These versions can then be upgraded to using the
 
 # COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2016 by Oriol Soriano, Doug Bell.
+This software is copyright (c) 2017 by Oriol Soriano, Doug Bell.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
