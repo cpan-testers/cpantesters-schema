@@ -74,11 +74,12 @@ representation.
 =cut
 
 # Must be unique for foreign keys to work
-unique_column 'guid', {
+column 'guid', {
     data_type   => 'char',
     is_nullable => 0,
     size        => 36,
 };
+unique_constraint guid => [qw( guid )];
 
 =attr state
 

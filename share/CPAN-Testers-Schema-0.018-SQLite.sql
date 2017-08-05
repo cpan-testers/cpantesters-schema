@@ -1,6 +1,6 @@
 -- 
 -- Created by SQL::Translator::Producer::SQLite
--- Created on Fri Aug  4 14:08:02 2017
+-- Created on Sat Aug  5 12:37:47 2017
 -- 
 
 BEGIN TRANSACTION;
@@ -71,7 +71,7 @@ CREATE TABLE cpanstats (
 
 CREATE INDEX cpanstats_idx_uploadid ON cpanstats (uploadid);
 
-CREATE UNIQUE INDEX cpanstats_guid ON cpanstats (guid);
+CREATE UNIQUE INDEX guid ON cpanstats (guid);
 
 --
 -- Table: ixlatest

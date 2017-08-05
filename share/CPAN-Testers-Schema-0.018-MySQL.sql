@@ -1,6 +1,6 @@
 -- 
 -- Created by SQL::Translator::Producer::MySQL
--- Created on Fri Aug  4 14:08:01 2017
+-- Created on Sat Aug  5 12:37:46 2017
 -- 
 SET foreign_key_checks=0;
 
@@ -68,7 +68,7 @@ CREATE TABLE `cpanstats` (
   `uploadid` integer unsigned NOT NULL,
   INDEX `cpanstats_idx_uploadid` (`uploadid`),
   PRIMARY KEY (`id`),
-  UNIQUE `cpanstats_guid` (`guid`),
+  UNIQUE `guid` (`guid`),
   CONSTRAINT `cpanstats_fk_uploadid` FOREIGN KEY (`uploadid`) REFERENCES `uploads` (`uploadid`)
 ) ENGINE=InnoDB;
 

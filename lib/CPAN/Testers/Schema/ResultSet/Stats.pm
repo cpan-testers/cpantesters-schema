@@ -70,7 +70,7 @@ sub insert_test_report ( $self, $report ) {
         uploadid => $uploadid,
     };
 
-    return $schema->resultset('Stats')->create($stat);
+    return $schema->resultset('Stats')->update_or_create($stat, { key => 'guid' });
 }
 
 1;
