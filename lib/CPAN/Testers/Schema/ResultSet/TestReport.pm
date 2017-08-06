@@ -67,7 +67,7 @@ sub insert_metabase_fact( $self, $fact ) {
 
     my $user_id = $fact->core_metadata->{creator}->resource;
     my ( $metabase_user ) = $self->result_source->schema->resultset( 'MetabaseUser' )
-        ->search( { resource => $user_id }, { order_by => '-id', limit => 1 } )->all;
+        ->search( { resource => $user_id }, { order_by => { -desc => 'id' }, limit => 1 } )->all;
 
     my %report = (
         reporter => {
