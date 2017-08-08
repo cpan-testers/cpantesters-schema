@@ -111,6 +111,9 @@ task deploy_dev =>
 Upgrade the database running on the given server. This task is called
 automatically by C<deploy> and C<deploy_dev>.
 
+This task also restarts all running services, since the code version and
+the database version must match.
+
 =cut
 
 task upgrade_database =>
@@ -120,6 +123,7 @@ task upgrade_database =>
         if ( $? ) {
             say last_command_output;
         }
+        run_task 'restart', on => connection->server;
     };
 
 =head2 install_database
@@ -140,6 +144,24 @@ task install_database =>
         }
     };
 
+=head2 restart
+
+Restart all the services on the machine. This is run automatically by
+the deploy processes after upgrading the database.
+
+The code version and the database version must be in-sync, and any
+running processes must get the new code by restarting.
+
+=cut
+
+task restart =>
+    group => 'api',
+    sub {
+        run 'sv restart ~/service/*';
+        if ( $? ) {
+            say last_command_output;
+        }
+    };
 
 #######################################################################
 
