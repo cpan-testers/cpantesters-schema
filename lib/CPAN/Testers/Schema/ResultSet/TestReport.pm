@@ -100,7 +100,7 @@ sub insert_metabase_fact( $self, $fact ) {
     my $format = DateTime::Format::ISO8601->new();
     my $creation = $format->parse_datetime( $fact->creation_time );
 
-    return $self->create({
+    return $self->update_or_create({
         id => $fact->guid,
         created => $creation,
         report => \%report,
