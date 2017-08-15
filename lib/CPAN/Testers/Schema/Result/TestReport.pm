@@ -60,13 +60,17 @@ The full JSON report.
 XXX: Describe the format a little and link to the main schema OpenAPI
 format on http://api.cpantesters.org
 
+The serializer for this column will convert UTF-8 characters into their
+corresponding C<\u####> escape sequence, so this column is safe for
+tables with Latin1 encoding.
+
 =cut
 
 column 'report', {
     data_type            => 'JSON',
     is_nullable          => 0,
     'serializer_class'   => 'JSON',
-    'serializer_options' => { allow_blessed => 1, convert_blessed => 1 }
+    'serializer_options' => { allow_blessed => 1, convert_blessed => 1, ascii => 1 }
 };
 
 =method new

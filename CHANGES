@@ -2,6 +2,13 @@ Changelog for CPAN-Testers-Schema
 
 {{ $NEXT }}
 
+    [Fixed]
+
+    - The test report JSON column is now safe for Latin-1-encoded
+      tables. Any UTF-8 characters will be transformed into their
+      `\u####` escape sequence. This is a stopgap until this data can be
+      moved to a proper UTF-8-encoded table.
+
 0.018     2017-08-05 12:42:52-05:00 America/Chicago
 
     [Fixed]
