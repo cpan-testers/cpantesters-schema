@@ -119,6 +119,7 @@ the database version must match.
 task upgrade_database =>
     group => 'api',
     sub {
+        Rex::Logger::info( 'Upgrading database' );
         run 'source ~/.profile; cpantesters-schema upgrade';
         if ( $? ) {
             say last_command_output;
@@ -137,6 +138,7 @@ database.
 task install_database =>
     group => 'api',
     sub {
+        Rex::Logger::info( 'Installing database' );
         run 'mysql --defaults-file=~/.cpanstats.cnf --database "" -e"create database cpanstats"';
         run 'source ~/.profile; cpantesters-schema install';
         if ( $? ) {
@@ -157,6 +159,7 @@ running processes must get the new code by restarting.
 task restart =>
     group => 'api',
     sub {
+        Rex::Logger::info( 'Restating all services' );
         run 'sv restart ~/service/*';
         if ( $? ) {
             say last_command_output;
