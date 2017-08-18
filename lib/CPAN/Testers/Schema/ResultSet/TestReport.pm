@@ -69,6 +69,9 @@ sub insert_metabase_fact( $self, $fact ) {
     my ( $metabase_user ) = $self->result_source->schema->resultset( 'MetabaseUser' )
         ->search( { resource => $user_id }, { order_by => { -desc => 'id' }, limit => 1 } )->all;
 
+    # Remove leading "v" from Perl version
+    $fact_data{perl_version} =~ s/^v+//;
+
     my %report = (
         reporter => {
             name => $metabase_user->fullname,

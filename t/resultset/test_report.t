@@ -253,7 +253,7 @@ sub create_metabase_report( %attrs ) {
         osname => 'linux',
         osversion => '2.14.4',
         archname => 'x86_64-linux',
-        perl_version => '5.12.0',
+        perl_version => 'v5.12.0', # Some have a leading "v", some do not
         textreport => $text,
     });
 
