@@ -69,13 +69,17 @@ sub insert_metabase_fact( $self, $fact ) {
     my ( $metabase_user ) = $self->result_source->schema->resultset( 'MetabaseUser' )
         ->search( { resource => $user_id }, { order_by => { -desc => 'id' }, limit => 1 } )->all;
 
+    if ( !$metabase_user ) {
+        warn "Could not find metabase user $user_id\n";
+    }
+
     # Remove leading "v" from Perl version
     $fact_data{perl_version} =~ s/^v+//;
 
     my %report = (
         reporter => {
-            name => $metabase_user->fullname,
-            email => $metabase_user->email,
+            name => ( $metabase_user ? $metabase_user->fullname : 'Unknown' ),
+            email => ( $metabase_user ? $metabase_user->email : undef ),
         },
         environment => {
             system => {
