@@ -21,6 +21,7 @@ L<CPAN::Testers::Schema>
 
 use CPAN::Testers::Schema::Base 'ResultSet';
 use Scalar::Util qw( blessed );
+use Log::Any qw( $LOG );
 
 =method dist
 
@@ -58,6 +59,7 @@ APIs.
 =cut
 
 sub insert_metabase_fact( $self, $fact ) {
+    $LOG->infof( 'Inserting test report from Metabase fact (%s)', $fact->core_metadata->{guid} );
     my ( $fact_report ) = grep { blessed $_ eq 'CPAN::Testers::Fact::LegacyReport' } $fact->content->@*;
     my %fact_data = (
         $fact_report->content->%*,
@@ -70,7 +72,7 @@ sub insert_metabase_fact( $self, $fact ) {
         ->search( { resource => $user_id }, { order_by => { -desc => 'id' }, limit => 1 } )->all;
 
     if ( !$metabase_user ) {
-        warn "Could not find metabase user $user_id\n";
+        warn $LOG->warn( "Could not find metabase user $user_id" ) . "\n";
     }
 
     # Remove leading "v" from Perl version
