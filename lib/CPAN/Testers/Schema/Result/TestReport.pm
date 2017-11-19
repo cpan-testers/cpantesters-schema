@@ -24,9 +24,10 @@ L<DBIx::Class::Row>, L<CPAN::Testers::Schema>
 use CPAN::Testers::Schema::Base 'Result';
 use Data::UUID;
 use DateTime;
+use JSON::MaybeXS;
 table 'test_report';
 
-__PACKAGE__->load_components('InflateColumn::Serializer', 'InflateColumn::DateTime', 'Core');
+__PACKAGE__->load_components('InflateColumn::DateTime', 'Core');
 
 =attr id
 
@@ -69,9 +70,25 @@ tables with Latin1 encoding.
 column 'report', {
     data_type            => 'JSON',
     is_nullable          => 0,
-    'serializer_class'   => 'JSON',
-    'serializer_options' => { allow_blessed => 1, convert_blessed => 1, ascii => 1 }
 };
+
+my %JSON_OPT = (
+    allow_blessed => 1,
+    convert_blessed => 1,
+    ascii => 1,
+);
+__PACKAGE__->inflate_column( report => {
+    deflate => sub {
+        my ( $ref, $row ) = @_;
+        JSON::MaybeXS->new( %JSON_OPT )->encode( $ref );
+    },
+    inflate => sub {
+        my ( $raw, $row ) = @_;
+        JSON::MaybeXS->new( %JSON_OPT )->decode(
+            $raw =~ s/([\x{0000}-\x{001f}])/sprintf "\\u%v04x", $1/reg
+        );
+    },
+} );
 
 =method new
 
