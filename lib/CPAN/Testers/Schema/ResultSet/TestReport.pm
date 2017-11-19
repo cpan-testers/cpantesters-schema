@@ -1,6 +1,6 @@
 use utf8;
 package CPAN::Testers::Schema::ResultSet::TestReport;
-our $VERSION = '0.020';
+our $VERSION = '0.021';
 # ABSTRACT: Query the raw test reports
 
 =head1 SYNOPSIS

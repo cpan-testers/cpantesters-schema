@@ -2,6 +2,8 @@ Changelog for CPAN-Testers-Schema
 
 {{ $NEXT }}
 
+0.020     2017-11-18 20:44:13-06:00 America/Chicago
+
     [Changed]
 
     - Added some additional logging to some resultset methods to try to
