@@ -69,6 +69,7 @@ directory. These versions can then be upgraded to using the
 - Breno G. de Oliveira <garu@cpan.org>
 - Joel Berger <joel.a.berger@gmail.com>
 - Mohammad S Anwar <mohammad.anwar@yahoo.com>
+- Nick Tonkin <nick@nicktonkin.net>
 
 # COPYRIGHT AND LICENSE
 

@@ -9,6 +9,7 @@ our $VERSION = '0.021';
     $rs->by_dist( 'My-Dist' );
     $rs->by_author( 'PREACTION' );
     $rs->since( '2016-01-01T00:00:00' );
+    $rs->maturity( 'stable' );
 
 =head1 DESCRIPTION
 
@@ -63,6 +64,21 @@ sub since( $self, $date ) {
     my $fulldate = $date =~ s/[-:T]//gr;
     $fulldate = substr $fulldate, 0, 12; # 12 digits makes YYYYMMDDHHNN
     return $self->search( { 'report.fulldate' => { '>=', $fulldate } }, { join => 'report' } );
+}
+
+=method maturity
+
+    $rs = $rs->maturity( 'stable' );
+
+Restrict results to only those dists that are stable. Also supported:
+'dev' to restrict to only development dists.
+
+=cut
+
+sub maturity( $self, $maturity ) {
+    my %map = ( 'stable' => 1, 'dev' => 2 );
+    $maturity = $map{ $maturity };
+    return $self->search( { 'me.distmat' => $maturity } );
 }
 
 1;
