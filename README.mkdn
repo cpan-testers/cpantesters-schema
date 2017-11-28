@@ -4,7 +4,7 @@ CPAN::Testers::Schema - Schema for CPANTesters database processed from test repo
 
 # VERSION
 
-version 0.020
+version 0.021
 
 # STATUS
 
@@ -69,7 +69,7 @@ directory. These versions can then be upgraded to using the
 - Breno G. de Oliveira <garu@cpan.org>
 - Joel Berger <joel.a.berger@gmail.com>
 - Mohammad S Anwar <mohammad.anwar@yahoo.com>
-- Nick Tonkin <nick@nicktonkin.net>
+- Nick Tonkin <1nickt@users.noreply.github.com>
 
 # COPYRIGHT AND LICENSE
 
