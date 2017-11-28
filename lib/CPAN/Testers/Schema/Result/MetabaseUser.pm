@@ -1,5 +1,5 @@
 package CPAN::Testers::Schema::Result::MetabaseUser;
-our $VERSION = '0.021';
+our $VERSION = '0.022';
 # ABSTRACT: Legacy user information from the Metabase
 
 =head1 SYNOPSIS
