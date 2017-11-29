@@ -240,6 +240,15 @@ subtest 'maturity' => sub {
     };
 };
 
+subtest 'limit_per_dist' => sub {
+    my $rs = $schema->resultset( 'Release' )->limit_per_dist( 1 );
+    $rs->result_class( 'DBIx::Class::ResultClass::HashRefInflator' );
+    $schema->storage->debug(1);
+    is_deeply [ $rs->all ], [ $data{Release}->@[1,3] ], 'limit 1 results per dist'
+        or diag explain [ $rs->all ];
+    $schema->storage->debug(0);
+};
+
 subtest 'since and maturity' => sub {
      my $rs = $schema->resultset( 'Release' )
        ->since( '2016-08-20T00:00:00' )

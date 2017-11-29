@@ -81,5 +81,31 @@ sub maturity( $self, $maturity ) {
     return $self->search( { 'me.distmat' => $maturity } );
 }
 
+=method limit_per_dist
+
+    $rs = $rs->limit_per_dist( 2 );
+
+Restrict results to a maximum number per distribution.
+
+=cut
+
+sub limit_per_dist( $self, $limit ) {
+    my $rs = $self->search(
+        {
+            -and => [
+                \[ '( SELECT COUNT(*)
+                      FROM uploads
+                      WHERE uploads.dist = me.dist
+                      AND uploads.version >= me.version ) <= ?' => $limit ],
+            ],
+        },
+        { join => 'upload' },
+    );
+
+    use Data::Dumper;
+    #warn Dumper($rs->as_query);
+    return $rs;
+}
+
 1;
 __END__
