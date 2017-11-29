@@ -280,6 +280,15 @@ subtest 'by_dist' => sub {
             or diag explain [ $rs->all ];
     };
 
+    subtest 'limit_per_dist' => sub {
+        my $rs = $schema->resultset( 'Release' )->by_dist( 'My-Dist' )
+                ->limit_per_dist( 1 );
+        $rs->result_class( 'DBIx::Class::ResultClass::HashRefInflator' );
+        $schema->storage->debug(1);
+        is_deeply [ $rs->all ], [ $data{Release}[2] ], 'get maximum 1 item for My-Dist'
+            or diag explain [ $rs->all ];
+        $schema->storage->debug(0);
+    };
 };
 
 subtest 'by_author' => sub {

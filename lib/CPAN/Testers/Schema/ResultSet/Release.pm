@@ -102,8 +102,6 @@ sub limit_per_dist( $self, $limit ) {
         { join => 'upload' },
     );
 
-    use Data::Dumper;
-    #warn Dumper($rs->as_query);
     return $rs;
 }
 
