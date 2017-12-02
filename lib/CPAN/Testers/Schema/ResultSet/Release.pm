@@ -81,5 +81,53 @@ sub maturity( $self, $maturity ) {
     return $self->search( { 'me.distmat' => $maturity } );
 }
 
+=method limit_per_dist
+
+    $rs = $rs->limit_per_dist( 2 );
+
+Restrict results to a maximum number per distribution.
+
+=cut
+
+sub limit_per_dist( $self, $limit, %args ) {
+    my $seq_sql = q{
+        SELECT COUNT(*)
+        FROM uploads
+        WHERE uploads.dist = me.dist
+        AND uploads.version >= me.version
+    };
+
+    my @bind;
+
+    if ( $args{'maturity'} ) {
+        $seq_sql .= qq{
+            AND me.distmat = ?
+        };
+        push @bind, $args{'maturity'};
+    }
+
+    if ( $args{'author'} ) {
+        $seq_sql .= q{
+            AND uploads.author = ?
+        };
+        push @bind, $args{'author'};
+    };
+
+    $seq_sql = "( $seq_sql ) <= ?";
+
+    push @bind, $limit;
+
+    my $rs = $self->search(
+        {
+            -and => [
+                \[ $seq_sql => @bind ],
+            ],
+        },
+        { join => 'upload' },
+    );
+
+    return $rs;
+}
+
 1;
 __END__
