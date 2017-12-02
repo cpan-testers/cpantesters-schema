@@ -208,8 +208,36 @@ my %data = (
     ],
 );
 
-my $schema = prepare_temp_schema;
-$schema->populate( $_, $data{ $_ } ) for keys %data;
+if ( !eval { require Test::mysqld; 1 } ) {
+    plan skip_all => 'Requires Test::mysqld';
+    return;
+}
+
+no warnings 'once';
+my $mysqld = Test::mysqld->new(
+    my_cnf => {
+        'skip-networking' => '', # no TCP socket
+    },
+);
+if ( !$mysqld ) {
+    plan skip_all => "Failed to start up server: $Test::mysqld::errstr";
+    return;
+}
+
+my ( undef, $version ) = DBI->connect( $mysqld->dsn(dbname => 'test') )->selectrow_array( q{SHOW VARIABLES LIKE 'version'} );
+my ( $mversion ) = $version =~ /^(\d+[.]\d+)/;
+if ( $mversion < 5.7 ) {
+    plan skip_all => "Need MySQL version 5.7 or higher. This is $version";
+    return;
+}
+
+my $schema = CPAN::Testers::Schema->connect(
+    $mysqld->dsn(dbname => 'test'), undef, undef, { ignore_version => 1 },
+);
+$schema->deploy;
+
+# Order is important else we can get a FK error on insert
+$schema->populate( $_, $data{ $_ } ) for ( qw/ Upload Stats Release / );
 
 my $rs = $schema->resultset( 'Release' );
 $rs->result_class( 'DBIx::Class::ResultClass::HashRefInflator' );
@@ -243,10 +271,8 @@ subtest 'maturity' => sub {
 subtest 'limit_per_dist' => sub {
     my $rs = $schema->resultset( 'Release' )->limit_per_dist( 1 );
     $rs->result_class( 'DBIx::Class::ResultClass::HashRefInflator' );
-    $schema->storage->debug(1);
-    is_deeply [ $rs->all ], [ $data{Release}->@[1,3] ], 'limit 1 results per dist'
+    is_deeply [ $rs->all ], [ $data{Release}->@[1,3] ], 'limit 1 result per dist'
         or diag explain [ $rs->all ];
-    $schema->storage->debug(0);
 };
 
 subtest 'since and maturity' => sub {
@@ -254,9 +280,31 @@ subtest 'since and maturity' => sub {
        ->since( '2016-08-20T00:00:00' )
        ->maturity( 'stable' );
     $rs->result_class( 'DBIx::Class::ResultClass::HashRefInflator' );
-    is_deeply [ $rs->all ], [ $data{Release}->@[1..2] ], 'get stable items since 2016-08-20'
+    is_deeply [ $rs->all ], [ $data{Release}->@[1,2] ], 'get stable items since 2016-08-20'
         or diag explain [ $rs->all ];
 };
+
+subtest 'since and limit_per_dist' => sub {
+     my $rs = $schema->resultset( 'Release' )
+       ->since( '2016-08-20T00:00:00' )
+       ->limit_per_dist( 1 );
+    $rs->result_class( 'DBIx::Class::ResultClass::HashRefInflator' );
+    is_deeply [ $rs->all ], [ $data{Release}->@[1,3] ], 'get one item per dist since 2016-08-20'
+        or diag explain [ $rs->all ];
+};
+
+subtest 'maturity and limit_per_dist' => sub {
+    my $rs = $schema->resultset( 'Release' )
+       ->maturity( 'stable' )
+       ->limit_per_dist( 1, maturity => 1 );
+    $rs->result_class( 'DBIx::Class::ResultClass::HashRefInflator' );
+$schema->storage->debug(1);
+    my $res = $rs->all;
+$schema->storage->debug(0);
+    is_deeply [ $rs->all ], [ $data{Release}->@[1,2] ], 'get one stable item per dist'
+        or diag explain [ $rs->all ];
+};
+
 
 subtest 'by_dist' => sub {
     my $rs = $schema->resultset( 'Release' )->by_dist( 'My-Dist' );
@@ -284,10 +332,8 @@ subtest 'by_dist' => sub {
         my $rs = $schema->resultset( 'Release' )->by_dist( 'My-Dist' )
                 ->limit_per_dist( 1 );
         $rs->result_class( 'DBIx::Class::ResultClass::HashRefInflator' );
-        $schema->storage->debug(1);
-        is_deeply [ $rs->all ], [ $data{Release}[2] ], 'get maximum 1 item for My-Dist'
+        is_deeply [ $rs->all ], [ $data{Release}[1] ], 'get maximum 1 item for My-Dist'
             or diag explain [ $rs->all ];
-        $schema->storage->debug(0);
     };
 };
 
@@ -310,6 +356,14 @@ subtest 'by_author' => sub {
                 ->maturity( 'dev' );
         $rs->result_class( 'DBIx::Class::ResultClass::HashRefInflator' );
         is_deeply [ $rs->all ], [ $data{Release}[3] ], 'get dev items for PREACTION'
+            or diag explain [ $rs->all ];
+    };
+
+    subtest 'limit_per_dist' => sub {
+        my $rs = $schema->resultset( 'Release' )->by_author( 'PREACTION' )
+                ->limit_per_dist( 1, author => 'PREACTION' );
+        $rs->result_class( 'DBIx::Class::ResultClass::HashRefInflator' );
+        is_deeply [ $rs->all ], [ $data{Release}->@[0,3] ], 'get maximum 1 item for each PREACTION dist'
             or diag explain [ $rs->all ];
     };
 };
