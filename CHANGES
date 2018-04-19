@@ -2,6 +2,8 @@ Changelog for CPAN-Testers-Schema
 
 {{ $NEXT }}
 
+0.022     2018-04-19 14:26:24+02:00 Europe/Oslo
+
     [Added]
 
     - Added support for `since` in Stats resultset
