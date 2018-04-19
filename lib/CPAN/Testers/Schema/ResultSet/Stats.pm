@@ -22,6 +22,20 @@ L<CPAN::Testers::Schema>
 use CPAN::Testers::Schema::Base 'ResultSet';
 use Log::Any '$LOG';
 
+=method since
+
+    my $rs = $rs->since( $iso_dt );
+
+Restrict the resultset to reports submitted since the given date/time (in ISO8601 format).
+
+=cut
+
+sub since( $self, $date ) {
+    my $fulldate = $date =~ s/[-:T]//gr;
+    $fulldate = substr $fulldate, 0, 12; # 12 digits makes YYYYMMDDHHNN
+    return $self->search( { fulldate => { '>=', $fulldate } } );
+}
+
 =method insert_test_report
 
     my $stat = $rs->insert_test_report( $report );
