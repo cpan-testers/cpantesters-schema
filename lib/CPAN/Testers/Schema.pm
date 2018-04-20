@@ -42,7 +42,7 @@ __PACKAGE__->upgrade_directory( dist_dir( 'CPAN-Testers-Schema' ) );
 
 =method connect_from_config
 
-    my $schema = CPAN::Testers::Schema->connect_from_config;
+    my $schema = CPAN::Testers::Schema->connect_from_config( %extra_conf );
 
 Connect to the MySQL database using a local MySQL configuration file
 in C<$HOME/.cpanstats.cnf>. This configuration file should look like:
@@ -55,10 +55,14 @@ in C<$HOME/.cpanstats.cnf>. This configuration file should look like:
 
 See L<DBD::mysql/mysql_read_default_file>.
 
+C<%extra_conf> will be added to the L<DBIx::Class::Schema/connect>
+method in the C<%dbi_attributes> hashref (see
+L<DBIx::Class::Storage::DBI/connect_info>).
+
 =cut
 
 # Convenience connect method
-sub connect_from_config ( $class ) {
+sub connect_from_config ( $class, %config ) {
     my $schema = $class->connect(
         "DBI:mysql:mysql_read_default_file=$ENV{HOME}/.cpanstats.cnf;".
         "mysql_read_default_group=application;mysql_enable_utf8=1",
@@ -70,6 +74,7 @@ sub connect_from_config ( $class ) {
             mysql_enable_utf8 => 1,
             quote_char => '`',
             name_sep   => '.',
+            %config,
         },
     );
     return $schema;
