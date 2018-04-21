@@ -6,7 +6,7 @@ our $VERSION = '0.023';
 =head1 SYNOPSIS
 
     my $rs = $schema->resultset( 'Release' );
-    $rs->by_dist( 'My-Dist' );
+    $rs->by_dist( 'My-Dist', '0.001' );
     $rs->by_author( 'PREACTION' );
     $rs->since( '2016-01-01T00:00:00' );
     $rs->maturity( 'stable' );
@@ -28,14 +28,19 @@ use CPAN::Testers::Schema::Base 'ResultSet';
 =method by_dist
 
     $rs = $rs->by_dist( 'My-Dist' );
+    $rs = $rs->by_dist( 'My-Dist', '0.001' );
 
-Add a dist constraint to the query, replacing any previous dist
-constraints.
+Add a dist constraint to the query (with optional version), replacing
+any previous dist constraints.
 
 =cut
 
-sub by_dist( $self, $dist ) {
-    return $self->search( { 'me.dist' => $dist } );
+sub by_dist( $self, $dist, $version = undef ) {
+    my %search = ( 'me.dist' => $dist );
+    if ( $version ) {
+        $search{ 'me.version' } = $version;
+    }
+    return $self->search( \%search );
 }
 
 =method by_author
