@@ -49,8 +49,15 @@ C<dev> Perl versions.
 sub perl_maturity( $self, $maturity ) {
     my $devel = $maturity eq 'stable' ? 0 : $maturity eq 'dev' ? 1
         : Carp::croak "Unknown maturity: $maturity; Must be one of: 'stable', 'dev'";
+    if ( !$devel ) {
+        # Patch versions are not stable either
+        return $self->search(
+            { 'perl_version.devel' => 0, 'perl_version.patch' => 0 },
+            { join => 'perl_version' },
+        );
+    }
     return $self->search(
-        { 'perl_version.devel' => $devel },
+        { -or => { 'perl_version.devel' => 1, 'perl_version.patch' => 1 } },
         { join => 'perl_version' },
     );
 }
