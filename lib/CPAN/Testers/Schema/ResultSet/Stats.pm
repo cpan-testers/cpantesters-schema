@@ -21,6 +21,7 @@ L<CPAN::Testers::Schema>
 
 use CPAN::Testers::Schema::Base 'ResultSet';
 use Log::Any '$LOG';
+use Carp ();
 
 =method since
 
@@ -34,6 +35,24 @@ sub since( $self, $date ) {
     my $fulldate = $date =~ s/[-:T]//gr;
     $fulldate = substr $fulldate, 0, 12; # 12 digits makes YYYYMMDDHHNN
     return $self->search( { fulldate => { '>=', $fulldate } } );
+}
+
+=method perl_maturity
+
+    $rs = $rs->perl_maturity( 'stable' ) # or 'dev'
+
+Restrict the resultset to reports submitted for either C<stable> or
+C<dev> Perl versions.
+
+=cut
+
+sub perl_maturity( $self, $maturity ) {
+    my $devel = $maturity eq 'stable' ? 0 : $maturity eq 'dev' ? 1
+        : Carp::croak "Unknown maturity: $maturity; Must be one of: 'stable', 'dev'";
+    return $self->search(
+        { 'perl_version.devel' => $devel },
+        { join => 'perl_version' },
+    );
 }
 
 =method insert_test_report
