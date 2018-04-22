@@ -271,4 +271,14 @@ Get the related row in the `uploads` table. See L<CPAN::Testers::Schema::Result:
 
 belongs_to upload => 'CPAN::Testers::Schema::Result::Upload' => 'uploadid';
 
+=method perl_version
+
+Get the related metadata about the Perl version this report is for. See
+L<CPAN::Testers::Schema::Result::PerlVersion>.
+
+=cut
+
+might_have perl_version => 'CPAN::Testers::Schema::Result::PerlVersion' =>
+    { 'foreign.version' => 'self.perl' };
+
 1;
