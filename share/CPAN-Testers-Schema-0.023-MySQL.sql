@@ -1,6 +1,6 @@
 -- 
 -- Created by SQL::Translator::Producer::MySQL
--- Created on Thu Apr 19 14:31:13 2018
+-- Created on Sun Apr 22 13:09:39 2018
 -- 
 SET foreign_key_checks=0;
 
@@ -16,6 +16,19 @@ CREATE TABLE `metabase_user` (
   `email` varchar(255) NULL,
   PRIMARY KEY (`id`),
   UNIQUE `metabase_user_resource` (`resource`)
+);
+
+DROP TABLE IF EXISTS `perl_version`;
+
+--
+-- Table: `perl_version`
+--
+CREATE TABLE `perl_version` (
+  `version` varchar(255) NOT NULL,
+  `perl` varchar(32) NULL,
+  `patch` tinyint(1) NOT NULL DEFAULT 0,
+  `devel` tinyint(1) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`version`)
 );
 
 DROP TABLE IF EXISTS `test_report`;

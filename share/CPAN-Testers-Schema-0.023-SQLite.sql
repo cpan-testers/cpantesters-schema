@@ -1,6 +1,6 @@
 -- 
 -- Created by SQL::Translator::Producer::SQLite
--- Created on Thu Apr 19 14:31:14 2018
+-- Created on Sun Apr 22 13:09:39 2018
 -- 
 
 BEGIN TRANSACTION;
@@ -18,6 +18,19 @@ CREATE TABLE metabase_user (
 );
 
 CREATE UNIQUE INDEX metabase_user_resource ON metabase_user (resource);
+
+--
+-- Table: perl_version
+--
+DROP TABLE perl_version;
+
+CREATE TABLE perl_version (
+  version varchar(255) NOT NULL,
+  perl varchar(32),
+  patch tinyint(1) NOT NULL DEFAULT 0,
+  devel tinyint(1) NOT NULL DEFAULT 0,
+  PRIMARY KEY (version)
+);
 
 --
 -- Table: test_report
