@@ -46,6 +46,9 @@ primary_column 'id', {
 The ISO8601 date/time of when the report was inserted into the database.
 Will default to the current time.
 
+The JSON report also contains a C<created> field. This is the date/time
+that the report was created on the reporter's machine.
+
 =cut
 
 column created => {
@@ -98,12 +101,16 @@ object and should not be called directly.
 This is overridden to provide sane defaults for the C<id> and C<created>
 fields.
 
+B<NOTE:> You should not supply a C<created> unless you are creating
+reports in the past. Reports created in the past will be hidden from
+many feeds, and may cause failures to not be reported to authors.
+
 =cut
 
 sub new( $class, $attrs ) {
     $attrs->{report}{id} = $attrs->{id} ||= Data::UUID->new->create_str;
     $attrs->{created} ||= DateTime->now( time_zone => 'UTC' );
-    $attrs->{report}{created} = $attrs->{created}->datetime . 'Z';
+    $attrs->{report}{created} ||= $attrs->{created}->datetime . 'Z';
     return $class->next::method( $attrs );
 };
 
