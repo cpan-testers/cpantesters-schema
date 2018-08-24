@@ -4,7 +4,7 @@ CPAN::Testers::Schema - Schema for CPANTesters database processed from test repo
 
 # VERSION
 
-version 0.022
+version 0.023
 
 # STATUS
 
@@ -36,7 +36,7 @@ processing, data APIs, and the frontend web application.
 
 ## connect\_from\_config
 
-    my $schema = CPAN::Testers::Schema->connect_from_config;
+    my $schema = CPAN::Testers::Schema->connect_from_config( %extra_conf );
 
 Connect to the MySQL database using a local MySQL configuration file
 in `$HOME/.cpanstats.cnf`. This configuration file should look like:
@@ -49,6 +49,10 @@ in `$HOME/.cpanstats.cnf`. This configuration file should look like:
 
 See ["mysql\_read\_default\_file" in DBD::mysql](https://metacpan.org/pod/DBD::mysql#mysql_read_default_file).
 
+`%extra_conf` will be added to the ["connect" in DBIx::Class::Schema](https://metacpan.org/pod/DBIx::Class::Schema#connect)
+method in the `%dbi_attributes` hashref (see
+["connect\_info" in DBIx::Class::Storage::DBI](https://metacpan.org/pod/DBIx::Class::Storage::DBI#connect_info)).
+
 ## ordered\_schema\_versions
 
 Get the available schema versions by reading the files in the share
@@ -59,10 +63,9 @@ directory. These versions can then be upgraded to using the
 
 [CPAN::Testers::Schema::Result::Stats](https://metacpan.org/pod/CPAN::Testers::Schema::Result::Stats), [DBIx::Class](https://metacpan.org/pod/DBIx::Class)
 
-# AUTHORS
+# AUTHOR
 
-- Oriol Soriano <oriolsoriano@gmail.com>
-- Doug Bell <preaction@cpan.org>
+Oriol Soriano <oriolsoriano@gmail.com>
 
 # CONTRIBUTORS
 
@@ -70,6 +73,7 @@ directory. These versions can then be upgraded to using the
 - Joel Berger <joel.a.berger@gmail.com>
 - Mohammad S Anwar <mohammad.anwar@yahoo.com>
 - Nick Tonkin <1nickt@users.noreply.github.com>
+- Paul Cochrane <paul@liekut.de>
 
 # COPYRIGHT AND LICENSE
 
