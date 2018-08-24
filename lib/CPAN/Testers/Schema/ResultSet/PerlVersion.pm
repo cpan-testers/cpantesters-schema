@@ -1,6 +1,6 @@
 use utf8;
 package CPAN::Testers::Schema::ResultSet::PerlVersion;
-our $VERSION = '0.023';
+our $VERSION = '0.024';
 # ABSTRACT: Query Perl version metadata
 
 =head1 SYNOPSIS

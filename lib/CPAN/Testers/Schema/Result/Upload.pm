@@ -1,6 +1,6 @@
 use utf8;
 package CPAN::Testers::Schema::Result::Upload;
-our $VERSION = '0.023';
+our $VERSION = '0.024';
 # ABSTRACT: Information about uploads to CPAN
 
 =head1 SYNOPSIS

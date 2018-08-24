@@ -2,6 +2,8 @@ Changelog for CPAN-Testers-Schema
 
 {{ $NEXT }}
 
+0.023     2018-08-23 20:32:28-05:00 America/Chicago
+
     [Added]
 
     - Added a `version` argument to release resultsets to filter
