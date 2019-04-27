@@ -20,6 +20,9 @@ our $VERSION = '0.024';
     # check what version our database is running
     cpantesters-schema check
 
+    # fetch data from the CPAN Testers API to populate our database
+    cpantesters-schema fetch report --dist Yancy@1.023
+
 =head1 DESCRIPTION
 
 This script works with L<DBIx::Class::Schema::Versioned> to prepare a new
@@ -54,7 +57,7 @@ L<DBIx::Class::Schema::Versioned>
 use v5.24;
 use warnings;
 use Pod::Usage;
-use Getopt::Long;
+use Getopt::Long qw( GetOptionsFromArray );
 use CPAN::Testers::Schema;
 use File::Share qw( dist_dir );
 
@@ -106,5 +109,27 @@ sub upgrade {
         $schema->install( '0.000' );
     }
     $schema->upgrade;
+}
+
+sub fetch {
+    my ( @args ) = @_;
+    my $schema = CPAN::Testers::Schema->connect_from_config;
+    GetOptionsFromArray( \my %opt, \@args,
+        'dist|d=@s',
+    );
+    my @tables = @args;
+    if ( !$opt{dist}->@* ) {
+        die "Must specify one or more --dist options";
+    }
+    for my $dist_spec ( $opt{dist}->@* ) {
+        my ( $dist, $version ) = split /\@/, $dist_spec;
+        $schema->populate_from_api(
+            {
+                dist => $dist,
+                version => $version,
+            },
+            @tables,
+        );
+    }
 }
 
