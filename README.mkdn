@@ -4,7 +4,7 @@ CPAN::Testers::Schema - Schema for CPANTesters database processed from test repo
 
 # VERSION
 
-version 0.023
+version 0.024
 
 # STATUS
 
@@ -59,13 +59,40 @@ Get the available schema versions by reading the files in the share
 directory. These versions can then be upgraded to using the
 [cpantesters-schema](https://metacpan.org/pod/cpantesters-schema) script.
 
+## populate\_from\_api
+
+    $schema->populate_from_api( \%search, @tables );
+
+Populate the given tables from the CPAN Testers API ([http://api.cpantesters.org](http://api.cpantesters.org)).
+`%search` has the following keys:
+
+- dist
+
+    A distribution to populate
+
+- version
+
+    A distribution version to populate
+
+- author
+
+    Populate an author's data
+
+The available `@tables` are:
+
+- upload
+- release
+- summary
+- report
+
 # SEE ALSO
 
 [CPAN::Testers::Schema::Result::Stats](https://metacpan.org/pod/CPAN::Testers::Schema::Result::Stats), [DBIx::Class](https://metacpan.org/pod/DBIx::Class)
 
-# AUTHOR
+# AUTHORS
 
-Oriol Soriano <oriolsoriano@gmail.com>
+- Oriol Soriano <oriolsoriano@gmail.com>
+- Doug Bell <preaction@cpan.org>
 
 # CONTRIBUTORS
 
