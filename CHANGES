@@ -2,6 +2,8 @@ Changelog for CPAN-Testers-Schema
 
 {{ $NEXT }}
 
+0.024     2019-04-27 15:58:52+01:00 Europe/London
+
     [Added]
 
     - Added 'cpantesters-schema fetch' command to download data from the
