@@ -70,7 +70,7 @@ my %tasks = (
     check => \&check,
 );
 
-$tasks{ shift @ARGV }->();
+$tasks{ shift @ARGV }->( @ARGV );
 
 sub prepare {
     my $schema = CPAN::Testers::Schema->connect_from_config;
@@ -102,6 +102,9 @@ sub install {
 
 sub upgrade {
     my $schema = CPAN::Testers::Schema->connect_from_config;
+    if ( !$schema->get_db_version() ) {
+        $schema->install( '0.000' );
+    }
     $schema->upgrade;
 }
 
