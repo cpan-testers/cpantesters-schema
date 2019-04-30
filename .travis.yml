@@ -1,14 +1,22 @@
 language: perl
 
+services:
+    - docker
+
+env:
+    global:
+        - MYSQL_VERSION=5.7
+        - DOCKER_USERNAME=cpantestersbot
+        - DOCKER_IMAGE_NAME=cpantesters/schema
+        - DOCKER_VERSION_TAG=${DOCKER_IMAGE_NAME}:${TRAVIS_BUILD_NUMBER}
+        - secure: TwXUAXVF3hoRxup9W6QPSLtLAP48PzPSaX/zzmGvXLU36iasD4se1MhZE+FeM3M51Y6qnTWQ/j/5y3GsfZ5QGiaaLtbGVayal8iniBU+A9Dd1giBS6zv65baiclOSJ1MHT8i7xNh64rWDtmlX2An7UkugPS4v6aRtrnBmizhtJtpsBUiZ1+J85QEbo+Syna2g5dilZSG4fJdp8jkm2DRaJ77nYedCUvPn0TSXksEaz5vY93VkDv/7Aiqxz8nHZT2O1zWv2KFToofDOpI5jg8IYa0MMx9ANnvc7aRu9AJQRVgtK4wet5/Z4jnGqU8FDsvnpTBFe1I1W73Ifx+R6vJ1GW+LB/FfhrJIw9NmEnmutwRxD0PiTqmdLhAPJEheFSpp+aiiASssD4a0/roRf+xiFG50NEK/b9jZAWBl2OjuMjrN9CUsDp4t+boU4B0RyOQD3g2+K4x4J98QfGXyYjs6ak0/M+LUZKnXCh+UVnSHiMAfGFjb543sPTN6LyRzEN/L7fz9ikV2mqFI3XVf55cvV+CgYw92QfQtm52HjLDesBesclL1f3Mou2ajTy/kIUMzhZFV/T+Un5ybXQDGiQXxlJTVArVC9aJx+OJkL1nJhmQd427p2tysUOnr/E6/cOIBKoFCi6MnIz5q5Ti2hYTFAVPpKjty/8Mc42JrjvSxUQ=
 matrix:
     include:
         - perl: "5.24"
-          env: COVERAGE=1 MYSQL_VERSION=5.7
-        - perl: "blead"
-          env: MYSQL_VERSION=5.7
-    allow_failures:
-        - perl: "blead"
-          env: MYSQL_VERSION=5.7
+        - perl: "5.24"
+          env: COVERAGE=1
+        - perl: "5.26"
+          env: BUILD_DOCKER=yes
 
 before_install:
     - if [ x"$MYSQL_VERSION" != "x" ];
@@ -44,3 +52,18 @@ script:
 
 after_success:
     - coverage-report
+
+deploy:
+- provider: script
+  skip_cleanup: true
+  on:
+    branch: master
+    condition: $BUILD_DOCKER = 'yes'
+  script:
+  - cd ..;
+    docker pull "$DOCKER_IMAGE_NAME" || true;
+    docker build --pull --cache-from "$DOCKER_IMAGE_NAME"
+      --tag $DOCKER_IMAGE_NAME --tag $DOCKER_VERSION_TAG .;
+    docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD";
+    docker push $DOCKER_IMAGE_NAME;
+
