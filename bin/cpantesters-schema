@@ -106,9 +106,11 @@ sub install {
 sub upgrade {
     my $schema = CPAN::Testers::Schema->connect_from_config;
     if ( !$schema->get_db_version() ) {
-        $schema->install( '0.000' );
+        $schema->deploy;
     }
-    $schema->upgrade;
+    else {
+        $schema->upgrade;
+    }
 }
 
 sub fetch {
