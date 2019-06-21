@@ -144,8 +144,13 @@ sub populate_from_api( $self, $search, @tables ) {
     my $dtf = DateTime::Format::ISO8601->new();
 
     # Establish dependencies
-    my %tables = map {; $_ => 1 } @tables;
     my @order = qw( upload summary release report );
+    my $match_tables = join '|', @order;
+    if ( my @unknown = grep { !/^$match_tables$/ } @tables ) {
+        die 'Unknown table(s): ', join ', ', @unknown;
+    }
+
+    my %tables = map {; $_ => 1 } @tables;
     # release depends on data in uploads and summary
     if ( $tables{ release } ) {
         @tables{qw( upload summary )} = ( 1, 1 );
@@ -170,6 +175,9 @@ sub populate_from_api( $self, $search, @tables ) {
                 $url .= '/author/' . $search->{author};
             }
             my $tx = $ua->get( $url );
+            if ( my $err = $tx->error ) {
+                die q{Error fetching table '%s': %s}, $table, $err;
+            }
             my @rows = map {
                 $_->{released} = $dtf->parse_datetime( $_->{released} )->epoch;
                 $_->{type} = 'cpan';
@@ -187,6 +195,9 @@ sub populate_from_api( $self, $search, @tables ) {
                 }
             }
             my $tx = $ua->get( $url );
+            if ( my $err = $tx->error ) {
+                die q{Error fetching table '%s': %s}, $table, $err;
+            }
             my @rows = map {
                 my $dt = $dtf->parse_datetime( delete $_->{date} );
                 $_->{postdate} = $dt->strftime( '%Y%m' );
@@ -216,6 +227,9 @@ sub populate_from_api( $self, $search, @tables ) {
                 $url .= '/author/' . $search->{author};
             }
             my $tx = $ua->get( $url );
+            if ( my $err = $tx->error ) {
+                die q{Error fetching table '%s': %s}, $table, $err;
+            }
             my @rows = map {
                 delete $_->{author}; # Author is from Upload
                 my $stats_rs = $self->resultset( 'Stats' )
