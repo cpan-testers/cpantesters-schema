@@ -57,7 +57,7 @@ L<DBIx::Class::Schema::Versioned>
 use v5.24;
 use warnings;
 use Pod::Usage;
-use Getopt::Long qw( GetOptionsFromArray );
+use Getopt::Long qw( GetOptionsFromArray :config pass_through );
 use CPAN::Testers::Schema;
 use File::Share qw( dist_dir );
 
@@ -71,6 +71,7 @@ my %tasks = (
     install => \&install,
     upgrade => \&upgrade,
     check => \&check,
+    fetch => \&fetch,
 );
 
 $tasks{ shift @ARGV }->( @ARGV );
@@ -116,8 +117,8 @@ sub upgrade {
 sub fetch {
     my ( @args ) = @_;
     my $schema = CPAN::Testers::Schema->connect_from_config;
-    GetOptionsFromArray( \my %opt, \@args,
-        'dist|d=@s',
+    GetOptionsFromArray( \@args, \my %opt,
+        'dist|d=s@',
     );
     my @tables = @args;
     if ( !$opt{dist}->@* ) {
