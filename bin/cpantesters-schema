@@ -74,7 +74,8 @@ my %tasks = (
     fetch => \&fetch,
 );
 
-$tasks{ shift @ARGV }->( @ARGV );
+my $task = shift @ARGV;
+$tasks{ $task }->( @ARGV );
 
 sub prepare {
     my $schema = CPAN::Testers::Schema->connect_from_config;

@@ -155,6 +155,11 @@ sub populate_from_api( $self, $search, @tables ) {
     if ( $tables{ release } ) {
         @tables{qw( upload summary )} = ( 1, 1 );
     }
+    # In order to link the report from the dist via the API, we need
+    # to get the summaries first
+    if ( $tables{ report } ) {
+        @tables{qw( summary )} = ( 1 );
+    }
     # summary depends on data in uploads
     if ( $tables{ summary } ) {
         @tables{qw( upload )} = ( 1 );
@@ -250,6 +255,36 @@ sub populate_from_api( $self, $search, @tables ) {
             # ; use Data::Dumper;
             # ; say "Populate release: " . Dumper \@rows;
             $self->resultset( 'Release' )->populate( \@rows );
+        }
+
+        if ( $table eq 'report' ) {
+            $url .= '/report';
+
+            # There is no direct API to get reports by dist/version, BUT
+            # we already have summaries loaded in the database so we can
+            # get the GUIDs out of there.
+            Mojo::Promise->map(
+                { concurrency => 8 },
+                sub( $summary ) {
+                    my $report_url = join '/', $url, $summary->guid;
+                    return $ua->get_p( $report_url );
+                },
+                $self->resultset( 'Stats' )->search( $search )->all,
+            )->then(
+                # Success
+                sub {
+                    my ( $tx ) = @_;
+                    my $report = $tx->[0]->res->json;
+                    $self->resultset( 'TestReport' )->create({
+                        id => $report->{id},
+                        report => $report,
+                    });
+                },
+            )->catch(
+                sub {
+                    warn "Problem fetching report: " . join ' ', @_;
+                },
+            )->wait;
         }
     }
 }
