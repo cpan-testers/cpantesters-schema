@@ -22,7 +22,8 @@ my %upload = (
 );
 my $upload = $schema->resultset( 'Upload' )->create( \%upload );
 
-subtest 'upload relationship' => sub {
+subtest 'relationships' => sub {
+    my $version_row = $schema->resultset( 'PerlVersion' )->create({ version => '5.24.0' });
     my %stats = (
         type => 2,
         guid => '00000000-0000-0000-0000-000000000000',
@@ -42,32 +43,9 @@ subtest 'upload relationship' => sub {
 
     ok $stats->upload, 'upload relationship exists';
     is $stats->upload->uploadid, $upload->uploadid, 'correct upload is related';
-};
-
-subtest 'perl_version relationship' => sub {
-    my $schema = prepare_temp_schema;
-    my $version_row = $schema->resultset( 'PerlVersion' )->create({ version => '5.24.0' });
-
-    my %stats = (
-        type => 2,
-        guid => '00000000-0000-0000-0000-000000000000',
-        state => 'pass',
-        postdate => '201607',
-        tester => 'doug@example.com (Doug Bell)',
-        dist => 'My-Dist',
-        version => '1.000',
-        platform => 'darwin-2level',
-        perl => '5.24.0',
-        osname => 'darwin',
-        osvers => '15.5.0',
-        fulldate => '201607141234',
-        uploadid => $upload->uploadid,
-    );
-    my $stats = $schema->resultset( 'Stats' )->create( \%stats );
 
     ok $stats->perl_version, 'perl_version relationship exists';
     is $stats->perl_version->perl, '5.24.0', 'correct perl version is related';
-
 };
 
 done_testing;

@@ -217,6 +217,11 @@ sub populate_from_api( $self, $search, @tables ) {
             } $tx->res->json->@*;
             # ; use Data::Dumper;
             # ; say "Populate summary: " . Dumper \@rows;
+            for my $perl ( uniq map { $_->{perl} } @rows ) {
+                $self->resultset( 'PerlVersion' )->find_or_create({
+                    version => $perl,
+                });
+            }
             $self->resultset( 'Stats' )->populate( \@rows );
         }
 

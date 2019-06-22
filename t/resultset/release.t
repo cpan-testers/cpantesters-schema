@@ -32,6 +32,11 @@ my %stats_default = (
 );
 
 my %data = (
+    PerlVersion => [
+        {
+            version => '5.22.0',
+        },
+    ],
 
     Upload => [
         {
@@ -209,7 +214,7 @@ my %data = (
 );
 
 my $schema = prepare_temp_schema;
-$schema->populate( $_, $data{ $_ } ) for keys %data;
+$schema->populate( $_, $data{ $_ } ) for qw( PerlVersion Upload Stats Release );
 
 my $rs = $schema->resultset( 'Release' );
 $rs->result_class( 'DBIx::Class::ResultClass::HashRefInflator' );
