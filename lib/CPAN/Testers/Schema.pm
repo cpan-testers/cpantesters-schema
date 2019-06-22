@@ -223,7 +223,7 @@ sub populate_from_api( $self, $search, @tables ) {
                     version => $perl,
                 });
             }
-            $self->resultset( 'Stats' )->update_or_create( $_ ) for @rows;
+            $self->resultset( 'Stats' )->update_or_create( $_, { key => 'guid' } ) for @rows;
         }
 
         if ( $table eq 'release' ) {
@@ -284,7 +284,7 @@ sub populate_from_api( $self, $search, @tables ) {
                         die sprintf q{Error fetching table '%s': (%s) %s}, $table, $err->{code} // 'XXX', $err->{message};
                     }
                     my $report = $tx->res->json;
-                    $self->resultset( 'TestReport' )->create({
+                    $self->resultset( 'TestReport' )->update_or_create({
                         id => $report->{id},
                         report => $report,
                     });
