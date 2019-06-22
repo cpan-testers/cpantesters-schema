@@ -140,6 +140,7 @@ The available C<@tables> are:
 
 sub populate_from_api( $self, $search, @tables ) {
     my $ua = $self->{_ua} ||= Mojo::UserAgent->new;
+    $ua->inactivity_timeout( 120 );
     my $base_url = $self->{_url} ||= 'http://api.cpantesters.org/v3';
     my $dtf = DateTime::Format::ISO8601->new();
 
@@ -278,8 +279,11 @@ sub populate_from_api( $self, $search, @tables ) {
             )->then(
                 # Success
                 sub {
-                    my ( $tx ) = @_;
-                    my $report = $tx->[0]->res->json;
+                    my $tx = shift->[0];
+                    if ( my $err = $tx->error ) {
+                        die sprintf q{Error fetching table '%s': (%s) %s}, $table, $err->{code} // 'XXX', $err->{message};
+                    }
+                    my $report = $tx->res->json;
                     $self->resultset( 'TestReport' )->create({
                         id => $report->{id},
                         report => $report,
@@ -287,7 +291,7 @@ sub populate_from_api( $self, $search, @tables ) {
                 },
             )->catch(
                 sub {
-                    warn "Problem fetching report: " . join ' ', @_;
+                    warn 'Problem fetching report: ' . join ' ', @_;
                 },
             )->wait;
         }
