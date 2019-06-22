@@ -181,7 +181,7 @@ sub populate_from_api( $self, $search, @tables ) {
             }
             my $tx = $ua->get( $url );
             if ( my $err = $tx->error ) {
-                die q{Error fetching table '%s': %s}, $table, $err;
+                die sprintf q{Error fetching table '%s': (%s) %s}, $table, $err->{code} // 'XXX', $err->{message};
             }
             my @rows = map {
                 $_->{released} = $dtf->parse_datetime( $_->{released} )->epoch;
@@ -201,7 +201,7 @@ sub populate_from_api( $self, $search, @tables ) {
             }
             my $tx = $ua->get( $url );
             if ( my $err = $tx->error ) {
-                die q{Error fetching table '%s': %s}, $table, $err;
+                die sprintf q{Error fetching table '%s': (%s) %s}, $table, $err->{code} // 'XXX', $err->{message};
             }
             my @rows = map {
                 my $dt = $dtf->parse_datetime( delete $_->{date} );
@@ -233,7 +233,7 @@ sub populate_from_api( $self, $search, @tables ) {
             }
             my $tx = $ua->get( $url );
             if ( my $err = $tx->error ) {
-                die q{Error fetching table '%s': %s}, $table, $err;
+                die sprintf q{Error fetching table '%s': (%s) %s}, $table, $err->{code} // 'XXX', $err->{message};
             }
             my @rows = map {
                 delete $_->{author}; # Author is from Upload
