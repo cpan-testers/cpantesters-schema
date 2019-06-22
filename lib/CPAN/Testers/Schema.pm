@@ -189,7 +189,7 @@ sub populate_from_api( $self, $search, @tables ) {
                 $_->{type} = 'cpan';
                 $_;
             } $tx->res->json->@*;
-            $self->resultset( 'Upload' )->populate( \@rows );
+            $self->resultset( 'Upload' )->update_or_create( $_ ) for @rows;
         }
 
         if ( $table eq 'summary' ) {
@@ -223,7 +223,7 @@ sub populate_from_api( $self, $search, @tables ) {
                     version => $perl,
                 });
             }
-            $self->resultset( 'Stats' )->populate( \@rows );
+            $self->resultset( 'Stats' )->update_or_create( $_ ) for @rows;
         }
 
         if ( $table eq 'release' ) {
@@ -260,7 +260,7 @@ sub populate_from_api( $self, $search, @tables ) {
             } $tx->res->json->@*;
             # ; use Data::Dumper;
             # ; say "Populate release: " . Dumper \@rows;
-            $self->resultset( 'Release' )->populate( \@rows );
+            $self->resultset( 'Release' )->update_or_create( $_ ) for @rows;
         }
 
         if ( $table eq 'report' ) {
