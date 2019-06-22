@@ -147,7 +147,7 @@ sub populate_from_api( $self, $search, @tables ) {
     # Establish dependencies
     my @order = qw( upload summary release report );
     my $match_tables = join '|', @order;
-    if ( my @unknown = grep { !/^$match_tables$/ } @tables ) {
+    if ( my @unknown = grep { !/^(?:$match_tables)$/ } @tables ) {
         die 'Unknown table(s): ', join ', ', @unknown;
     }
 
