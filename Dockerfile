@@ -17,4 +17,4 @@ RUN cpanm \
 COPY ./cpanfile ./cpanfile
 RUN cpanm --installdeps .
 COPY ./ ./
-RUN dzil install
+RUN dzil install --install-command "cpanm -v ."
