@@ -166,6 +166,19 @@ __PACKAGE__->inflate_column(
     },
 );
 
+=method report_metrics
+
+The linked report metrics rows for this distribution, a L<CPAN::Testers::Schema::ResultSet::Release>
+object.
+
+=cut
+
+has_many report_metrics => 'CPAN::Testers::Schema::Result::Release',
+    {
+        'foreign.dist' => 'self.dist',
+        'foreign.version' => 'self.version',
+    };
+
 package
     CPAN::Testers::Schema::DateTime::Formatter {
     sub format_datetime( $self, $dt ) {
