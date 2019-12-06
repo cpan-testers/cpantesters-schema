@@ -113,6 +113,21 @@ subtest 'report_metrics' => sub {
     $rs->result_class( 'DBIx::Class::ResultClass::HashRefInflator' );
     @metrics = $rs->all;
     is_deeply \@metrics, [ $metric_rows[2] ], 'patched release perl';
+
+    subtest 'total related report_metrics' => sub {
+        $rs = $schema->resultset( 'Upload' )->related_resultset( 'report_metrics' )->total_by_release;
+        $rs->result_class( 'DBIx::Class::ResultClass::HashRefInflator' );
+        @metrics = $rs->all;
+        is_deeply \@metrics,
+            [
+                {
+                    $metric_rows[0]->%*,
+                    $metric_rows[1]->%{ 'fail' },
+                    $metric_rows[2]->%{ 'na' },
+                },
+            ],
+            'totalling related_resultset works';
+    };
 };
 
 done_testing;

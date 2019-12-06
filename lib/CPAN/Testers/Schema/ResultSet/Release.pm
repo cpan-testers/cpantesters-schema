@@ -96,8 +96,9 @@ Sum the pass/fail/na/unknown counts by release distribution and version.
 
 sub total_by_release( $self ) {
     my @total_cols = qw( pass fail na unknown );
+    my $me = $self->current_source_alias;
     return $self->search( {}, {
-        group_by => [qw( dist version )],
+        group_by => [ map "$me.$_", qw( dist version ) ],
         '+select' => [ map { \"SUM($_)" } @total_cols ],
         '+as' => [ @total_cols ],
     } );
