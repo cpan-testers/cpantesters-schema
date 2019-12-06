@@ -324,5 +324,20 @@ subtest 'by_author' => sub {
     };
 };
 
+subtest 'total_by_release' => sub {
+    my $rs = $schema->resultset( 'Release' )->total_by_release;
+    $rs->result_class( 'DBIx::Class::ResultClass::HashRefInflator' );
+    is_deeply
+        [ $rs->all ],
+        [
+            {
+                $data{Release}[0]->%*,
+                $data{Release}[4]->%{'unknown'},
+            },
+            $data{Release}->@[1,2,3]
+        ], 'get totals for each release'
+        or diag explain [ $rs->all ];
+};
+
 done_testing;
 

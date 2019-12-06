@@ -86,5 +86,22 @@ sub maturity( $self, $maturity ) {
     return $self->search( { 'me.distmat' => $maturity } );
 }
 
+=method total_by_release
+
+    $rs = $rs->total_by_release
+
+Sum the pass/fail/na/unknown counts by release distribution and version.
+
+=cut
+
+sub total_by_release( $self ) {
+    my @total_cols = qw( pass fail na unknown );
+    return $self->search( {}, {
+        group_by => [qw( dist version )],
+        '+select' => [ map { \"SUM($_)" } @total_cols ],
+        '+as' => [ @total_cols ],
+    } );
+}
+
 1;
 __END__
