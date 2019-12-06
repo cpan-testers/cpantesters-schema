@@ -67,5 +67,26 @@ sub since( $self, $date ) {
     return $self->search( { released => { '>=' => $dt->epoch } } );
 }
 
+=method recent
+
+    # 20 most recent
+    $rs = $rs->recent( 20 );
+
+    # Just the most recent
+    $rs = $rs->recent( 1 );
+
+Return the most-recently released distributions sorted by their release
+date/time, descending. Defaults to returning up to 20 results.
+
+=cut
+
+sub recent( $self, $count = 20 ) {
+    return $self->search( { }, {
+        order_by => { -desc => 'released' },
+        rows => $count,
+        page => 1,
+    } );
+}
+
 1;
 __END__
