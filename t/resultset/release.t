@@ -210,6 +210,23 @@ my %data = (
             na => 0,
             unknown => 0,
         },
+        {
+            %default,
+            distmat => 1,
+            perlmat => 2,
+            # Upload info
+            dist => 'My-Dist',
+            version => '1.001',
+            uploadid => 1,
+            # Stats
+            id => 2,
+            guid => '00000000-0000-0000-0000-000000000002',
+            # Release summary
+            pass => 0,
+            fail => 0,
+            na => 0,
+            unknown => 1,
+        },
     ],
 );
 
@@ -233,7 +250,7 @@ subtest 'maturity' => sub {
     subtest 'stable only' => sub {
         my $rs = $schema->resultset( 'Release' )->maturity( 'stable' );
         $rs->result_class( 'DBIx::Class::ResultClass::HashRefInflator' );
-        is_deeply [ $rs->all ], [ $data{Release}->@[0..2] ], 'get only stable items'
+        is_deeply [ $rs->all ], [ $data{Release}->@[0..2,4] ], 'get only stable items'
             or diag explain [ $rs->all ];
     };
 
@@ -257,7 +274,7 @@ subtest 'since and maturity' => sub {
 subtest 'by_dist' => sub {
     my $rs = $schema->resultset( 'Release' )->by_dist( 'My-Dist' );
     $rs->result_class( 'DBIx::Class::ResultClass::HashRefInflator' );
-    is_deeply [ $rs->all ], [ $data{Release}->@[0,1] ], 'get items for My-Dist'
+    is_deeply [ $rs->all ], [ $data{Release}->@[0,1,4] ], 'get items for My-Dist'
         or diag explain [ $rs->all ];
 
     subtest 'since' => sub {
@@ -279,7 +296,7 @@ subtest 'by_dist' => sub {
     subtest 'version' => sub {
         my $rs = $schema->resultset( 'Release' )->by_dist( 'My-Dist', '1.001' );
         $rs->result_class( 'DBIx::Class::ResultClass::HashRefInflator' );
-        is_deeply [ $rs->all ], [ $data{Release}->@[0] ], 'get 1.001 of My-Dist'
+        is_deeply [ $rs->all ], [ $data{Release}->@[0,4] ], 'get 1.001 of My-Dist'
             or diag explain [ $rs->all ];
     };
 };
@@ -287,7 +304,7 @@ subtest 'by_dist' => sub {
 subtest 'by_author' => sub {
     my $rs = $schema->resultset( 'Release' )->by_author( 'PREACTION' );
     $rs->result_class( 'DBIx::Class::ResultClass::HashRefInflator' );
-    is_deeply [ $rs->all ], [ $data{Release}->@[0,2,3] ], 'get items for PREACTION'
+    is_deeply [ $rs->all ], [ $data{Release}->@[0,4,2,3] ], 'get items for PREACTION'
         or diag explain [ $rs->all ];
 
     subtest 'since' => sub {
