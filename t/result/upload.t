@@ -121,7 +121,7 @@ subtest 'report_metrics' => sub {
         is_deeply \@metrics,
             [
                 {
-                    $metric_rows[0]->%*,
+                    $metric_rows[0]->%{qw( dist version pass unknown )},
                     $metric_rows[1]->%{ 'fail' },
                     $metric_rows[2]->%{ 'na' },
                 },

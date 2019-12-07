@@ -99,8 +99,9 @@ sub total_by_release( $self ) {
     my $me = $self->current_source_alias;
     return $self->search( {}, {
         group_by => [ map "$me.$_", qw( dist version ) ],
-        '+select' => [ map { \"SUM($_)" } @total_cols ],
-        '+as' => [ @total_cols ],
+        select => [ qw( dist version ), map { \"SUM($_)" } @total_cols ],
+        as => [ qw( dist version ), @total_cols ],
+        order_by => undef,
     } );
 }
 

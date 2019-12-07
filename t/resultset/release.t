@@ -331,10 +331,10 @@ subtest 'total_by_release' => sub {
         [ $rs->all ],
         [
             {
-                $data{Release}[0]->%*,
+                $data{Release}[0]->%{ qw( dist version pass fail na ) },
                 $data{Release}[4]->%{'unknown'},
             },
-            $data{Release}->@[1,2,3]
+            map +{ $_->%{qw( dist version pass fail na unknown )} }, $data{Release}->@[1,2,3]
         ], 'get totals for each release'
         or diag explain [ $rs->all ];
 };
