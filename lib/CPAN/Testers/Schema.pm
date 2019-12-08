@@ -241,6 +241,7 @@ sub populate_from_api( $self, $search, @tables ) {
             if ( my $err = $tx->error ) {
                 die sprintf q{Error fetching table '%s': (%s) %s}, $table, $err->{code} // 'XXX', $err->{message};
             }
+            my @results = $search->{version} ? ( $tx->res->json ) : $tx->res->json->@*;
             my @rows = map {
                 delete $_->{author}; # Author is from Upload
                 my $stats_rs = $self->resultset( 'Stats' )
@@ -257,7 +258,7 @@ sub populate_from_api( $self, $search, @tables ) {
                 $_->{perlmat} = 1;
                 $_->{patched} = 1;
                 $_;
-            } $tx->res->json->@*;
+            } @results;
             # ; use Data::Dumper;
             # ; say "Populate release: " . Dumper \@rows;
             $self->resultset( 'Release' )->update_or_create( $_ ) for @rows;
@@ -273,26 +274,31 @@ sub populate_from_api( $self, $search, @tables ) {
                 { concurrency => 8 },
                 sub( $summary ) {
                     my $report_url = join '/', $url, $summary->guid;
-                    return $ua->get_p( $report_url );
+                    #; say "Getting report $report_url";
+                    return $ua->get_p( $report_url )->then(
+                        # Success
+                        sub {
+                            my ( $tx ) = @_;
+                            if ( my $err = $tx->error ) {
+                                die sprintf q{Error fetching table '%s': (%s) %s}, $table, $err->{code} // 'XXX', $err->{message};
+                            }
+                            my $report = $tx->res->json;
+                            #; say "Writing $report->{id}";
+                            $self->resultset( 'TestReport' )->update_or_create({
+                                id => $report->{id},
+                                report => $report,
+                            });
+                        },
+                        # Failure
+                        sub {
+                            warn 'Problem fetching report: ' . join ' ', @_;
+                        },
+                    );
                 },
                 $self->resultset( 'Stats' )->search( $search )->all,
             )->then(
-                # Success
-                sub {
-                    my $tx = shift->[0];
-                    if ( my $err = $tx->error ) {
-                        die sprintf q{Error fetching table '%s': (%s) %s}, $table, $err->{code} // 'XXX', $err->{message};
-                    }
-                    my $report = $tx->res->json;
-                    $self->resultset( 'TestReport' )->update_or_create({
-                        id => $report->{id},
-                        report => $report,
-                    });
-                },
-            )->catch(
-                sub {
-                    warn 'Problem fetching report: ' . join ' ', @_;
-                },
+                undef,
+                sub { warn 'Problem fetching reports: ' . join ' ', @_ },
             )->wait;
         }
     }

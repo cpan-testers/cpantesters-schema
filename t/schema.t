@@ -246,17 +246,15 @@ subtest 'release for dist+version' => sub {
         },
     ];
 
-    local $api_data{ release_dist_version } = [
-        {
-            author => "PREACTION",
-            dist => "Yancy",
-            fail => 1,
-            na => 12,
-            pass => 59,
-            unknown => 3,
-            version => "1.032"
-        },
-    ];
+    local $api_data{ release_dist_version } = {
+        author => "PREACTION",
+        dist => "Yancy",
+        fail => 1,
+        na => 12,
+        pass => 59,
+        unknown => 3,
+        version => "1.032"
+    };
 
     my $schema = prepare_temp_schema();
     $schema->{_ua} = $mock_ua;
