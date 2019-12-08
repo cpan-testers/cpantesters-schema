@@ -15,6 +15,7 @@ queries for L<CPAN::Testers::Schema::Result::Release> objects.
 =cut
 
 use CPAN::Testers::Schema::Base 'Test';
+use List::Util qw( sum );
 
 my %default = (
     oncpan => 1,
@@ -331,10 +332,14 @@ subtest 'total_by_release' => sub {
         [ $rs->all ],
         [
             {
-                $data{Release}[0]->%{ qw( dist version pass fail na ) },
+                $data{Release}[0]->%{ qw( dist version uploadid pass fail na ) },
                 $data{Release}[4]->%{'unknown'},
+                total => sum( $data{Release}[0]->@{qw( pass fail na )}, $data{Release}[4]{unknown} ),
             },
-            map +{ $_->%{qw( dist version pass fail na unknown )} }, $data{Release}->@[1,2,3]
+            map +{
+                $_->%{qw( dist version uploadid pass fail na unknown )},
+                total => sum( $_->@{qw( pass fail na unknown )} ),
+            }, $data{Release}->@[1,2,3]
         ], 'get totals for each release'
         or diag explain [ $rs->all ];
 };

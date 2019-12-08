@@ -98,9 +98,14 @@ sub total_by_release( $self ) {
     my @total_cols = qw( pass fail na unknown );
     my $me = $self->current_source_alias;
     return $self->search( {}, {
-        group_by => [ map "$me.$_", qw( dist version ) ],
-        select => [ qw( dist version ), map { \"SUM($_)" } @total_cols ],
-        as => [ qw( dist version ), @total_cols ],
+        # The uploadid here is included to allow joins from the results
+        group_by => [ map "$me.$_", qw( dist version uploadid ) ],
+        select => [
+            qw( dist version uploadid ),
+            ( map { \"SUM($_) AS $_" } @total_cols ),
+            ( \sprintf 'SUM(%s) AS total', join ' + ', @total_cols )
+        ],
+        as => [ qw( dist version uploadid ), @total_cols, 'total' ],
         order_by => undef,
     } );
 }

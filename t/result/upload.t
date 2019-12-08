@@ -10,6 +10,7 @@ L<CPAN::Testers::Schema>, L<DBIx::Class>
 =cut
 
 use CPAN::Testers::Schema::Base 'Test';
+use List::Util qw( sum );
 
 subtest 'create' => sub {
     my $schema = prepare_temp_schema;
@@ -121,9 +122,14 @@ subtest 'report_metrics' => sub {
         is_deeply \@metrics,
             [
                 {
-                    $metric_rows[0]->%{qw( dist version pass unknown )},
+                    $metric_rows[0]->%{qw( dist version uploadid pass unknown )},
                     $metric_rows[1]->%{ 'fail' },
                     $metric_rows[2]->%{ 'na' },
+                    total => sum(
+                        $metric_rows[0]->@{qw( pass unknown )},
+                        $metric_rows[1]{fail},
+                        $metric_rows[2]{na},
+                    ),
                 },
             ],
             'totalling related_resultset works';
