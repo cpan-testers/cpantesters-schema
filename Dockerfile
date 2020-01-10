@@ -14,7 +14,7 @@ RUN cpanm \
     Path::Tiny \
     SQL::Translator
 # Load last version's modules, to again cut down on rebuild time
-COPY ./cpanfile ./cpanfile
+COPY ./cpanfile /app/cpanfile
 RUN cpanm --installdeps .
-COPY ./ ./
+COPY ./ /app
 RUN dzil install --install-command "cpanm -v ."
