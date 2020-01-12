@@ -25,6 +25,7 @@ use CPAN::Testers::Schema::Base 'Result';
 use Data::UUID;
 use DateTime;
 use JSON::MaybeXS;
+use Mojo::Util qw( html_unescape );
 table 'test_report';
 
 __PACKAGE__->load_components('InflateColumn::DateTime', 'Core');
@@ -127,6 +128,80 @@ sub upload( $self ) {
     my ( $dist, $vers ) = $self->report->{distribution}->@{qw( name version )};
     return $self->result_source->schema->resultset( 'Upload' )
         ->search({ dist => $dist, version => $vers })->single;
+}
+
+=method dist_name
+
+The dist name being reported on.
+
+=cut
+
+sub dist_name( $self ) {
+    return $self->report->{distribution}{name};
+}
+
+=method dist_version
+
+The dist version being reported on.
+
+=cut
+
+sub dist_version( $self ) {
+    return $self->report->{distribution}{version};
+}
+
+=method lang_version
+
+The language and version the test was executed with
+
+=cut
+
+sub lang_version( $self ) {
+    return sprintf '%s v%s',
+        $self->report->{environment}{language}->@{qw( name version )};
+}
+
+=method platform
+
+The platform the test was run on
+
+=cut
+
+sub platform( $self ) {
+    return join ' ', $self->report->{environment}{language}{archname};
+}
+
+=method grade
+
+The report grade. One of 'pass', 'fail', 'na', 'unknown'.
+
+=cut
+
+sub grade( $self ) {
+    return $self->report->{result}{grade};
+}
+
+=method text
+
+The full text of the report, either from the phased sections or the
+"uncategorized" section.
+
+=cut
+
+my @output_phases = qw( configure build test install );
+sub text( $self ) {
+    return $self->report->{result}{output}{uncategorized}
+        || join "\n\n", grep defined, $self->report->{result}{output}->@{ @output_phases };
+}
+
+=method tester_name
+
+The name of the tester who sent the report
+
+=cut
+
+sub tester_name( $self ) {
+    return html_unescape $self->report->{reporter}{name};
 }
 
 1;
