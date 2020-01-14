@@ -1,6 +1,6 @@
 use utf8;
 package CPAN::Testers::Schema::Result::LatestIndex;
-our $VERSION = '0.025';
+our $VERSION = '0.026';
 # ABSTRACT: A cache of the latest version of a dist by author
 
 =head1 SYNOPSIS
