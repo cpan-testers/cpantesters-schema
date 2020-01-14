@@ -132,7 +132,7 @@ sub upload( $self ) {
 
 =method dist_name
 
-The dist name being reported on.
+The name of the distribution that was tested.
 
 =cut
 
@@ -142,7 +142,7 @@ sub dist_name( $self ) {
 
 =method dist_version
 
-The dist version being reported on.
+The version of the distribution that was tested.
 
 =cut
 

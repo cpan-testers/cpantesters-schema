@@ -51,6 +51,7 @@ L<DBIx::Class::Row>, L<CPAN::Testers::Schema>
 =cut
 
 use CPAN::Testers::Schema::Base 'Result';
+use Mojo::Util qw( html_unescape );
 table 'cpanstats';
 
 =attr id
@@ -280,5 +281,74 @@ L<CPAN::Testers::Schema::Result::PerlVersion>.
 
 might_have perl_version => 'CPAN::Testers::Schema::Result::PerlVersion' =>
     { 'foreign.version' => 'self.perl' };
+
+=method dist_name
+
+The name of the distribution that was tested.
+
+=cut
+
+sub dist_name( $self ) {
+    return $self->dist;
+}
+
+=method dist_version
+
+The version of the distribution that was tested.
+
+=cut
+
+sub dist_version( $self ) {
+    return $self->version;
+}
+
+=method lang_version
+
+The language and version the test was executed with
+
+=cut
+
+sub lang_version( $self ) {
+    return sprintf '%s v%s', 'Perl 5', $self->perl;
+}
+
+=method platform
+
+The platform the test was run on
+
+=cut
+
+sub platform( $self ) {
+    return $self->get_inflated_column( 'platform' );
+}
+
+=method grade
+
+The report grade. One of 'pass', 'fail', 'na', 'unknown'.
+
+=cut
+
+sub grade( $self ) {
+    return $self->state;
+}
+
+=method tester_name
+
+The name of the tester who sent the report
+
+=cut
+
+sub tester_name( $self ) {
+    # The name could either be in quotes before the e-mail, or in
+    # parentheses after.
+    for my $re ( qr{"([^"]+)"}, qr{\(([^)]+)\)} ) {
+        if ( $self->tester =~ $re ) {
+            # And it may have high-byte characters HTML-escaped
+            return html_unescape $1;
+        }
+    }
+    # Can't find just the name, so send it all for now...
+    return html_unescape $self->tester;
+}
 
 1;
