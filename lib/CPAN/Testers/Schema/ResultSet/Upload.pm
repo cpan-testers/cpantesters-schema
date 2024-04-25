@@ -88,5 +88,25 @@ sub recent( $self, $count = 20 ) {
     } );
 }
 
+=method latest_by_dist
+
+Return the dist/version pair for the latest version of all dists
+selected by the current resultset.
+
+=cut
+
+sub latest_by_dist( $self ) {
+    return $self->search( {}, {
+        select => [
+            qw( uploadid dist ),
+            \'MAX(me.version)',
+        ],
+        as => [ qw( uploadid dist version ) ],
+        group_by => [ map "me.$_", qw( dist ) ],
+        having => \'me.version = MAX(me.version)',
+        order_by => undef,
+    } );
+}
+
 1;
 __END__

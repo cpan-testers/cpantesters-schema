@@ -179,6 +179,18 @@ has_many report_metrics => 'CPAN::Testers::Schema::Result::Release',
         'foreign.version' => 'self.version',
     };
 
+=method report_stats
+
+The linked report stats rows for this distribution, a L<CPAN::Testers::Schema::ResultSet::Stats>
+object.
+
+=cut
+
+has_many report_stats => 'CPAN::Testers::Schema::Result::Stats',
+    {
+        'foreign.uploadid' => 'self.uploadid',
+    };
+
 package
     CPAN::Testers::Schema::DateTime::Formatter {
     sub format_datetime( $self, $dt ) {
