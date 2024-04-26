@@ -98,13 +98,12 @@ selected by the current resultset.
 sub latest_by_dist( $self ) {
     return $self->search( {}, {
         select => [
-            qw( uploadid dist ),
-            \'MAX(me.version)',
+            qw( dist ),
+            \'MAX(me.version) AS version',
         ],
-        as => [ qw( uploadid dist version ) ],
+        as => [ qw( dist version ) ],
         group_by => [ map "me.$_", qw( dist ) ],
-        having => \'me.version = MAX(me.version)',
-        order_by => undef,
+        having => \'version = MAX(version)',
     } );
 }
 

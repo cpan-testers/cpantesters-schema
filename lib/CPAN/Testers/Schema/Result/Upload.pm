@@ -188,7 +188,8 @@ object.
 
 has_many report_stats => 'CPAN::Testers::Schema::Result::Stats',
     {
-        'foreign.uploadid' => 'self.uploadid',
+        'foreign.dist' => 'self.dist',
+        'foreign.version' => 'self.version',
     };
 
 package
