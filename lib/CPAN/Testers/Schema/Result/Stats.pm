@@ -351,4 +351,22 @@ sub tester_name( $self ) {
     return html_unescape $self->tester;
 }
 
+=method datetime
+
+Get a L<DateTime> object for the date/time this report was generated.
+
+=cut
+
+sub datetime( $self ) {
+  my ( $y, $m, $d, $h, $n, $s ) = $self->fulldate =~ /^(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})?$/;
+  return DateTime->new(
+    year => $y,
+    month => $m,
+    day => $d,
+    hour => $h,
+    minute => $n,
+    second => $s // 0,
+  );
+}
+
 1;
