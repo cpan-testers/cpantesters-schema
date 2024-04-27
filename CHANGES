@@ -2,6 +2,11 @@ Changelog for CPAN-Testers-Schema
 
 {{ $NEXT }}
 
+  - Fixed relationship between dists and stat rows
+  - Added unique constraint on cpan uploads table
+  - Added provisional uploads records when missing while processing
+    report
+
 0.026     2024-04-25 15:15:16+01:00 Europe/Lisbon
 
   [Added]
