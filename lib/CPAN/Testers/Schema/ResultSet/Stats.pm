@@ -92,9 +92,19 @@ sub insert_test_report ( $self, $report ) {
     })->all;
 
     if ( !@uploads ) {
-        die $LOG->error(
-            sprintf 'No upload matches for dist %s version %s (report %s)',
+        $LOG->warnf(
+            'No upload matches for dist %s version %s (report %s). Creating provisional record.',
             $data->{distribution}->@{qw( name version )}, $guid,
+        );
+        @uploads = (
+          $schema->resultset('Upload')->create({
+            dist => $data->{distribution}{name},
+            $data->{distribution}->%{qw( version )},
+            type => 'unknown',
+            author => '',
+            filename => '',
+            released => 0,
+          }),
         );
     }
     elsif ( @uploads > 1 ) {
