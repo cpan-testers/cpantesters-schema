@@ -166,6 +166,10 @@ __PACKAGE__->inflate_column(
     },
 );
 
+unique_constraint(
+  dist_version => [ qw/dist version/ ],
+);
+
 =method report_metrics
 
 The linked report metrics rows for this distribution, a L<CPAN::Testers::Schema::ResultSet::Release>
