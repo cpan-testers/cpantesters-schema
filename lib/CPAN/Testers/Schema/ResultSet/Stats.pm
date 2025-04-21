@@ -115,11 +115,12 @@ sub insert_test_report ( $self, $report ) {
     }
     my $uploadid = $uploads[0]->uploadid;
 
+    my $encoded_name = $data->{reporter}{name} =~ s/([^[:ascii:]])/'&#' . ord( $1 ) . ';'/ger;
     my $stat = {
         guid => $guid,
         state => lc($data->{result}{grade}),
         postdate => $created->strftime('%Y%m'),
-        tester => qq["$data->{reporter}{name}" <$data->{reporter}{email}>],
+        tester => qq["] . $encoded_name . qq[" <$data->{reporter}{email}>],
         dist => $data->{distribution}{name},
         version => $data->{distribution}{version},
         platform => $data->{environment}{language}{archname},
