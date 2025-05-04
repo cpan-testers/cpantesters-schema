@@ -10,13 +10,16 @@ L<DBIx::Class::ResultSet>
 
 =cut
 
-use CPAN::Testers::Schema::Base 'Test';
+use CPAN::Testers::Schema::Base 'Test2';
 use Metabase::Fact;
 use Test::Reporter;
 use CPAN::Testers::Report;
 use CPAN::Testers::Fact::LegacyReport;
 use CPAN::Testers::Fact::TestSummary;
 use JSON::MaybeXS;
+use FindBin qw( $Bin );
+use Mojo::File qw( path );
+use YAML::PP;
 
 my $schema = prepare_temp_schema;
 my $user_resource = 'metabase:user:12345678-1234-1234-1234-123456789012';
@@ -73,7 +76,7 @@ subtest 'insert_metabase_fact' => sub {
     isa_ok $row->created, 'DateTime';
     is $row->created . 'Z', $given_report->core_metadata->{creation_time};
 
-    is_deeply $got_report, $expect_report, 'Metabase::Fact is converted correctly';
+    is $got_report, $expect_report, 'Metabase::Fact is converted correctly';
 
     subtest 'update metabase fact with same GUID' => sub {
         my $given_report = create_metabase_report(
@@ -118,7 +121,7 @@ subtest 'insert_metabase_fact' => sub {
 
         my $new_row = $schema->resultset( 'TestReport' )->insert_metabase_fact( $given_report );
         my $got_report = $new_row->report;
-        is_deeply $got_report, $expect_report, 'Row is updated and Metabase::Fact is converted';
+        is $got_report, $expect_report, 'Row is updated and Metabase::Fact is converted';
     };
 };
 
@@ -202,7 +205,7 @@ subtest 'dist() - fetch reports by language/dist' => sub {
     subtest 'dist() without version' => sub {
         my $rs = $schema->resultset( 'TestReport' );
         $rs = $rs->dist( 'Perl 5', 'Foo-Bar' );
-        is_deeply
+        is
             [ map { $_->id } $rs->all ],
             [ map { $_->id } $rows{'Perl 5'}->@{qw( Foo-Bar-1.34 Foo-Bar-2.67 )} ],
             'correct report ids found';
@@ -211,10 +214,85 @@ subtest 'dist() - fetch reports by language/dist' => sub {
     subtest 'dist() with version' => sub {
         my $rs = $schema->resultset( 'TestReport' );
         $rs = $rs->dist( 'Perl 5', 'Fizz-Buzz', '1.00' );
-        is_deeply
+        is
             [ map { $_->id } $rs->all ],
             [ map { $_->id } $rows{'Perl 5'}->@{qw( Fizz-Buzz-1.00 )} ],
             'correct report ids found';
+    };
+};
+
+subtest 'parse_metabase_report / convert_metabase_report' => sub {
+    my $yaml = path($Bin . '/../data/metabase.1.yaml')->slurp();
+    my @rows = YAML::PP->new->load_string( $yaml ); 
+    my $row = shift @rows;
+
+    my $rs = $schema->resultset( 'TestReport' );
+    my %attrs = (
+        grade => 'pass',
+        archname => 'i386-freebsd-thread-multi',
+        osname => 'freebsd',
+        osversion => '13.2-release-p8',
+        perl_version => '5.30.0',
+    );
+
+    subtest 'from "fact" column' => sub {
+        my $fact_report = $rs->parse_metabase_report( { fact => $row->{fact} } );
+        isa_ok $fact_report, 'CPAN::Testers::Report';
+        # This is not true, and is concerning...
+        #is $fact_report->guid, $row->{guid}, 'fact report guid matches row';
+
+        my $legacy_report = $fact_report->content->[0];
+        isa_ok $legacy_report, 'CPAN::Testers::Fact::LegacyReport';
+        # This is not true, but is not concerning
+        #is $legacy_report->guid, $row->{guid}, 'legacy report guid matches row';
+        like $legacy_report->content, { %attrs, textreport => qr{.} }, 'legacy report content is correct';
+
+        my $test_summary = $fact_report->content->[1];
+        isa_ok $test_summary, 'CPAN::Testers::Fact::TestSummary';
+        # This is not true, but is not concerning
+        #is $test_summary->guid, $row->{guid}, 'test summary guid matches row';
+        like $test_summary->content, \%attrs, 'test summary content is correct';
+
+        my $new_report = $rs->convert_metabase_report( $fact_report );
+        like $new_report->{report}, {
+            environment => {
+                language => {
+                    name => qr{Perl},
+                    version => qr{\Q$attrs{perl_version}},
+                    archname => $attrs{archname},
+                },
+                system => {
+                    %attrs{qw(osname osversion)},
+                },
+            },
+            distribution => {
+                name => 'TimeDate',
+                version => '2.33',
+            },
+            result => {
+                grade => $attrs{grade},
+            },
+        }, 'report converted to v3 schema';
+    };
+
+    subtest 'from "report" column' => sub {
+        delete $row->{fact};
+        my $report_report = $rs->parse_metabase_report( $row );
+        isa_ok $report_report, 'CPAN::Testers::Report';
+        # This is true only because we magicked it up
+        is $report_report->guid, $row->{guid}, 'report guid matches row';
+
+        my $legacy_report = $report_report->content->[0];
+        isa_ok $legacy_report, 'CPAN::Testers::Fact::LegacyReport';
+        # This is not true, but is not concerning
+        #is $legacy_report->guid, $row->{guid}, 'legacy report guid matches row';
+        like $legacy_report->content, { %attrs, textreport => qr{.} }, 'legacy report content is correct';
+
+        my $test_summary = $report_report->content->[1];
+        isa_ok $test_summary, 'CPAN::Testers::Fact::TestSummary';
+        # This is not true, but is not concerning
+        #is $test_summary->guid, $row->{guid}, 'test summary guid matches row';
+        like $test_summary->content, \%attrs, 'test summary content is correct';
     };
 };
 

@@ -49,6 +49,10 @@ our %IMPORT_BUNDLES = (
         'Test::More', 'Test::Lib',
         'Local::Schema' => [qw( prepare_temp_schema )],
     ],
+    Test2 => [
+        'Test2::V0', 'Test::Lib',
+        'Local::Schema' => [qw( prepare_temp_schema )],
+    ],
 );
 
 1;

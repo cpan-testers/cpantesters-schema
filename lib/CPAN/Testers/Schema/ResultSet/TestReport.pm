@@ -22,6 +22,11 @@ L<CPAN::Testers::Schema>
 use CPAN::Testers::Schema::Base 'ResultSet';
 use Scalar::Util qw( blessed );
 use Log::Any qw( $LOG );
+use JSON::MaybeXS qw( encode_json );
+use Data::FlexSerializer;
+use CPAN::Testers::Report;
+use CPAN::Testers::Fact::TestSummary;
+use CPAN::Testers::Fact::LegacyReport;
 
 =method dist
 
@@ -52,14 +57,28 @@ sub dist( $self, $lang, $dist, $version=undef ) {
 
     my $row = $rs->insert_metabase_fact( $fact );
 
-Convert a L<Metabase::Fact> object to the new test report structure and
-insert it into the database. This is for creating backwards-compatible
-APIs.
+Convert a L<CPAN::Testers::Report> object to the new test report
+structure and insert it into the database. This is for creating
+backwards-compatible APIs.
 
 =cut
 
 sub insert_metabase_fact( $self, $fact ) {
     $LOG->infof( 'Inserting test report from Metabase fact (%s)', $fact->core_metadata->{guid} );
+    my $row = $self->convert_metabase_report( $fact );
+    return $self->update_or_create($row);
+}
+
+=method convert_metabase_report
+
+Convert a L<CPAN::Testers::Report> object to the new test report
+structure and return the row object with C<id>, C<created>, and
+C<report> fields. C<report> is the canonical report schema as a Perl
+data structure.
+
+=cut
+
+sub convert_metabase_report( $self, $fact ) {
     my ( $fact_report ) = grep { blessed $_ eq 'CPAN::Testers::Fact::LegacyReport' } $fact->content->@*;
     my %fact_data = (
         $fact_report->content->%*,
@@ -108,12 +127,66 @@ sub insert_metabase_fact( $self, $fact ) {
 
     my $format = DateTime::Format::ISO8601->new();
     my $creation = $format->parse_datetime( $fact->creation_time );
-
-    return $self->update_or_create({
+    return {
         id => $fact->guid,
         created => $creation,
         report => \%report,
-    });
+    };
+}
+
+=method parse_metabase_report
+
+    my $metabase_report = $rs->parse_metabase_report( $metabase_row );
+
+This sub undoes the processing that CPAN Testers expects before it is
+put in the database so we can ensure that the report was submitted
+correctly.
+
+This code is stolen from CPAN::Testers::Data::Generator sub load_fact.
+
+C<$metabase_row> is a hashref with the following keys:
+
+    fact        - A serialized CPAN::Testers::Fact::TestSummary (I think)
+    report      - A serialized CPAN::Testers::Fact::LegacyReport (I think)
+
+=cut
+
+my $zipper = Data::FlexSerializer->new(
+    assume_compression  => 1,
+    detect_sereal       => 1,
+    detect_json         => 1,
+);
+
+sub parse_metabase_report( $self, $row ) {
+    if ( $row->{fact} ) {
+        return $zipper->deserialize( $row->{fact} );
+    }
+
+    die "No report" unless $row->{report};
+    my $data = $zipper->deserialize( $row->{report} );
+    my $struct = {
+        metadata => {
+            core => {
+                $data->{'CPAN::Testers::Fact::TestSummary'}{metadata}{core}->%*,
+                guid => $row->{guid},
+                type => 'CPAN-Testers-Report',
+            },
+        },
+        content => encode_json([
+            {
+                %{ $data->{'CPAN::Testers::Fact::LegacyReport'} },
+                content => encode_json( $data->{'CPAN::Testers::Fact::LegacyReport'}{content} ),
+            },
+            {
+                %{ $data->{'CPAN::Testers::Fact::TestSummary'} },
+                content => encode_json( $data->{'CPAN::Testers::Fact::TestSummary'}{content} ),
+            },
+        ]),
+    };
+    #; use Data::Dumper;
+    #; warn Dumper $struct;
+    my $fact = CPAN::Testers::Report->from_struct( $struct );
+    return $fact;
 }
 
 1;
