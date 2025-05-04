@@ -1,0 +1,39 @@
+#!/usr/bin/env perl
+# ABSTRACT: Migrate reports from the database to the reports dir
+# PODNAME: cpantesters-build-reports-dir
+our $VERSION = '0.028';
+
+use v5.24;
+use warnings;
+use Pod::Usage;
+use Getopt::Long qw( GetOptionsFromArray :config pass_through );
+use CPAN::Testers::Schema;
+use CPAN::Testers::ReportsDir;
+use YAML::XS ();
+
+GetOptions() or pod2usage(1);
+
+sub main {
+  my ( @args ) = @_;
+  my ( $reports_root, $start_id ) = @args;
+  $start_id //= 0;
+
+  my $rdb = CPAN::Testers::ReportsDir->new( root => $reports_dir );
+  my $schema = CPAN::Testers::Schema->connect_from_config;
+  my $rs = $schema->resultset('TestReport');
+  my $ypp = YAML::PP->new;
+
+  # Start crawling through the metabase.metabase table
+  my $dbi = DBI->connect('dbi:mysql:mysql_read_default_file=~/.cpanstats.cnf;mysql_read_default_group=application;database=metabase');
+  my $sth = $dbi->prepare('SELECT * FROM metabase.metabase WHERE id >= ?');
+  $sth->execute($start_id);
+  while ( my $mb_row = $sth->fetchrow_hashref ) {
+    my $metabase_report = $rs->parse_metabase_report( $mb_row );
+    my $test_report_row = $rs->convert_metabase_report( $metabase_report );
+    $rdb->write( $test_report_row->{id}, YAML::XS::Dump( $test_report_row->{report} ) );
+  }
+
+  # Start crawling through the cpanstats.test_reports table
+}
+
+exit main( @ARGV ) unless caller;
