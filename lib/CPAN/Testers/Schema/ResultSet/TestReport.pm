@@ -22,7 +22,7 @@ L<CPAN::Testers::Schema>
 use CPAN::Testers::Schema::Base 'ResultSet';
 use Scalar::Util qw( blessed );
 use Log::Any qw( $LOG );
-use JSON::MaybeXS qw( encode_json );
+use JSON::MaybeXS qw( decode_json encode_json );
 use Data::FlexSerializer;
 use CPAN::Testers::Report;
 use CPAN::Testers::Fact::TestSummary;
@@ -77,6 +77,10 @@ C<report> fields. C<report> is the canonical report schema as a Perl
 data structure.
 
 =cut
+
+# These modules are not loaded by Metabase automatically, so we have to load it ourselves
+use Metabase::Resource::cpan::distfile;
+use Metabase::Resource::metabase::user;
 
 sub convert_metabase_report( $self, $fact ) {
     my ( $fact_report ) = grep { blessed $_ eq 'CPAN::Testers::Fact::LegacyReport' } $fact->content->@*;
@@ -164,6 +168,19 @@ sub parse_metabase_report( $self, $row ) {
 
     die "No report" unless $row->{report};
     my $data = $zipper->deserialize( $row->{report} );
+
+    ### Normalize data
+    # The "report" column is more loosey-goosey than the "fact" column:
+    # Sometimes the `content` keys are also JSON, sometimes they aren't.
+    # So, if we get a simple scalar, we assume it's encoded JSON and
+    # decode it for normalization
+    for my $key ( keys %$data ) {
+        if ( !ref $data->{$key}{content} ) {
+            $data->{$key}{content} = decode_json( $data->{$key}{content} );
+        }
+    }
+
+    ### Build expected CPAN::Testers::Report structure
     my $struct = {
         metadata => {
             core => {
