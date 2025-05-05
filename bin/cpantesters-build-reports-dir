@@ -33,6 +33,10 @@ Optional. The starting ID for restarting an incomplete dump.
 If specified, will also dump the complete database row as a file with a C<.metabase>
 or C<.database> extension.
 
+=head2 --page <count>
+
+Process this many reports at a time.
+
 =head2 --max <count>
 
 Stop processing reports after processing C<count>.
@@ -57,9 +61,10 @@ use Log::Any qw( $LOG ), log_level => 'trace';
 
 my %opt = (
        	raw => 0,
-	max => 2_000_000_000,
+	max => 2_000_000_000, # High enough to get all of them
+	page => 100,
 );
-GetOptions(\%opt, 'raw|r', 'max=i' ) or pod2usage(1);
+GetOptions(\%opt, 'raw|r', 'max=i', 'page=i' ) or pod2usage(1);
 
 sub main {
   $LOG->info('Starting ' . $0);
@@ -72,18 +77,18 @@ sub main {
   my $schema = CPAN::Testers::Schema->connect_from_config;
   my $rs = $schema->resultset('TestReport');
   my $total_processed = 0;
-  my $page_size = 1000;
   my $got_rows = 0;
 
   # Start crawling through the metabase.metabase table
   $LOG->info('Connecting to Metabase');
   my $dbi = DBI->connect('dbi:mysql:mysql_read_default_file=~/.cpanstats.cnf;mysql_read_default_group=application;database=metabase');
-  while ( $total_processed <= 0 || $got_rows >= $page_size ) {
-    $LOG->info('Executing Metabase read', { total_processed => $total_processed, page_size => $page_size, start_id => $start_id });
-    my $sth = $dbi->prepare('SELECT * FROM metabase.metabase WHERE id >= ? LIMIT ' . $page_size);
+  while ( $total_processed <= 0 || $got_rows >= $opt{page} ) {
+    $LOG->info('Executing Metabase read', { total_processed => $total_processed, page_size => $opt{page}, start_id => $start_id });
+    my $sth = $dbi->prepare('SELECT * FROM metabase.metabase WHERE id >= ? LIMIT ' . $opt{page});
     $sth->execute($start_id);
     $got_rows = 0;
     while ( my $mb_row = $sth->fetchrow_hashref ) {
+      $total_processed++;
       $got_rows++;
       if ( $opt{raw} ) {
 	$rdb->write( "$mb_row->{guid}.metabase", YAML::XS::Dump( $mb_row ), timestamp => Time::Piece->new( $mb_row->{updated} ) );
@@ -93,7 +98,8 @@ sub main {
       $rdb->write( $test_report_row->{id}, YAML::XS::Dump( $test_report_row->{report} ), timestamp => $test_report_row->{created} );
       $start_id = $mb_row->{id} + 1;
     }
-    $LOG->info( "Read rows from Metabase", { got_rows => $got_rows, page_size => $page_size, next_start_id => $start_id });
+    $LOG->info( "Read rows from Metabase", { got_rows => $got_rows, page_size => $opt{page}, next_start_id => $start_id });
+    last if $total_processed >= $opt{max};
   }
   $LOG->info("Finished converting Metabase");
 
