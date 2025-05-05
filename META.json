@@ -5,7 +5,7 @@
       "Doug Bell <preaction@cpan.org>"
    ],
    "dynamic_config" : 0,
-   "generated_by" : "Dist::Zilla version 6.030, CPAN::Meta::Converter version 2.150010",
+   "generated_by" : "Dist::Zilla version 6.032, CPAN::Meta::Converter version 2.150010",
    "license" : [
       "perl_5"
    ],
@@ -33,6 +33,9 @@
       },
       "runtime" : {
          "requires" : {
+            "CPAN::Testers::Fact::LegacyReport" : "0",
+            "CPAN::Testers::Fact::TestSummary" : "0",
+            "CPAN::Testers::Report" : "0",
             "DBIx::Class" : "0",
             "DBIx::Class::Candy" : "0",
             "Data::UUID" : "0",
@@ -46,6 +49,7 @@
             "Mojolicious" : "8.13",
             "Path::Tiny" : "0.072",
             "SQL::Translator" : "0.11018",
+            "Test::Reporter" : "0",
             "perl" : "5.024",
             "strict" : "0",
             "warnings" : "0"
@@ -57,22 +61,25 @@
             "Test::mysqld" : "0"
          },
          "requires" : {
-            "CPAN::Testers::Fact::LegacyReport" : "0",
-            "CPAN::Testers::Fact::TestSummary" : "0",
-            "CPAN::Testers::Report" : "0",
+            "Data::GUID" : "0",
             "DateTime::Format::SQLite" : "0",
             "Exporter" : "0",
             "ExtUtils::MakeMaker" : "0",
             "File::Spec" : "0",
             "IO::Handle" : "0",
             "IPC::Open3" : "0",
+            "Test2::Suite" : "0",
             "Test::Lib" : "0",
             "Test::More" : "1.001005",
-            "Test::Reporter" : "0"
+            "YAML::PP" : "0"
          }
       }
    },
    "provides" : {
+      "CPAN::Testers::ReportsDir" : {
+         "file" : "lib/CPAN/Testers/ReportsDir.pm",
+         "version" : "0.028"
+      },
       "CPAN::Testers::Schema" : {
          "file" : "lib/CPAN/Testers/Schema.pm",
          "version" : "0.028"
@@ -156,8 +163,8 @@
       "Nick Tonkin <1nickt@users.noreply.github.com>",
       "Paul Cochrane <paul@liekut.de>"
    ],
-   "x_generated_by_perl" : "v5.28.0",
-   "x_serialization_backend" : "Cpanel::JSON::XS version 4.06",
+   "x_generated_by_perl" : "v5.40.2",
+   "x_serialization_backend" : "Cpanel::JSON::XS version 4.39",
    "x_spdx_expression" : "Artistic-1.0-Perl OR GPL-1.0-or-later"
 }
 
