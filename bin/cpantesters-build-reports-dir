@@ -55,7 +55,7 @@ use Pod::Usage;
 use Getopt::Long qw( GetOptionsFromArray :config pass_through );
 use CPAN::Testers::Schema;
 use CPAN::Testers::ReportsDir;
-use YAML::XS ();
+use JSON::XS qw( decode_json encode_json );
 use Log::Any::Adapter 'Stderr';
 use Log::Any qw( $LOG ), log_level => 'trace';
 
@@ -91,11 +91,11 @@ sub main {
       $total_processed++;
       $got_rows++;
       if ( $opt{raw} ) {
-	$rdb->write( "$mb_row->{guid}.metabase", YAML::XS::Dump( $mb_row ), timestamp => Time::Piece->new( $mb_row->{updated} ) );
+	$rdb->write( "$mb_row->{guid}.metabase", encode_json( $mb_row ), timestamp => Time::Piece->new( $mb_row->{updated} ) );
       }
       my $metabase_report = $rs->parse_metabase_report( $mb_row );
       my $test_report_row = $rs->convert_metabase_report( $metabase_report );
-      $rdb->write( $test_report_row->{id}, YAML::XS::Dump( $test_report_row->{report} ), timestamp => $test_report_row->{created} );
+      $rdb->write( $test_report_row->{id}, encode_json( $test_report_row->{report} ), timestamp => $test_report_row->{created} );
       $start_id = $mb_row->{id} + 1;
     }
     $LOG->info( "Read rows from Metabase", { got_rows => $got_rows, page_size => $opt{page}, next_start_id => $start_id });
