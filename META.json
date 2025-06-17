@@ -5,7 +5,7 @@
       "Doug Bell <preaction@cpan.org>"
    ],
    "dynamic_config" : 0,
-   "generated_by" : "Dist::Zilla version 6.032, CPAN::Meta::Converter version 2.150010",
+   "generated_by" : "Dist::Zilla version 6.033, CPAN::Meta::Converter version 2.150010",
    "license" : [
       "perl_5"
    ],
@@ -38,6 +38,7 @@
             "CPAN::Testers::Report" : "0",
             "DBIx::Class" : "0",
             "DBIx::Class::Candy" : "0",
+            "Data::FlexSerializer" : "0",
             "Data::UUID" : "0",
             "DateTime" : "0",
             "DateTime::Format::ISO8601" : "0",
@@ -76,10 +77,6 @@
       }
    },
    "provides" : {
-      "CPAN::Testers::ReportsDir" : {
-         "file" : "lib/CPAN/Testers/ReportsDir.pm",
-         "version" : "0.028"
-      },
       "CPAN::Testers::Schema" : {
          "file" : "lib/CPAN/Testers/Schema.pm",
          "version" : "0.028"
