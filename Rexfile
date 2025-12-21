@@ -30,8 +30,7 @@ use Rex::Commands::Sync;
 # Groups
 
 group all => qw(
-    cpantesters3.dh.bytemark.co.uk
-    cpantesters4.dh.bytemark.co.uk
+    nact-chi-001.cpantesters.org
 );
 
 #######################################################################

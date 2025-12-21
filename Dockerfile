@@ -1,7 +1,8 @@
 FROM cpantesters/base
 # Load some modules that will always be required, to cut down on docker
 # rebuild time
-RUN cpanm \
+RUN --mount=type=cache,target=/root/.cpanm \
+  cpanm -v --notest \
     DBIx::Class \
     DBIx::Class::Candy \
     DBD::SQLite \
@@ -13,8 +14,14 @@ RUN cpanm \
     Log::Any \
     Path::Tiny \
     SQL::Translator
+
 # Load last version's modules, to again cut down on rebuild time
 COPY ./cpanfile /app/cpanfile
-RUN cpanm --installdeps .
+RUN --mount=type=cache,target=/root/.cpanm \
+  cpanm --installdeps --notest .
+
 COPY ./ /app
-RUN dzil install --install-command "cpanm -v ."
+RUN --mount=type=cache,target=/root/.cpanm \
+  dzil authordeps --missing | cpanm -v --notest && \
+  dzil listdeps --missing | cpanm -v --notest && \
+  dzil install --install-command "cpanm -v --notest ."
