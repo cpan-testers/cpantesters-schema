@@ -60,11 +60,34 @@ use Pod::Usage;
 use Getopt::Long qw( GetOptionsFromArray :config pass_through );
 use CPAN::Testers::Schema;
 use File::Share qw( dist_dir );
+use Path::Tiny qw( path );
 
-my ( $preversion, $help );
+my ( $preversion, $help, $dsn, $username, $password, $password_file );
 GetOptions(
+    'dsn=s' => \$dsn,
+    'username=s' => \$username,
+    'password=s' => \$password,
+    'password-file=s' => \$password_file,
     'p|preversion:s'  => \$preversion,
 ) or pod2usage(1);
+
+if ($password_file) {
+  $password = path($password_file)->slurp;
+  chomp $password;
+}
+
+my $schema;
+if ( $dsn ) {
+    my @connect_args = (
+      $dsn,
+      ($username || $password ? ($username) : ()),
+      ($password ? ($password) : ()),
+    );
+    $schema = CPAN::Testers::Schema->connect( @connect_args );
+}
+else {
+    $schema = CPAN::Testers::Schema->connect_from_config;
+}
 
 my %tasks = (
     prepare => \&prepare,
@@ -78,7 +101,7 @@ my $task = shift @ARGV;
 $tasks{ $task }->( @ARGV );
 
 sub prepare {
-    my $schema = CPAN::Testers::Schema->connect_from_config;
+    my @args = @_;
     my $sql_dir = dist_dir( 'CPAN-Testers-Schema' );
     my $version = $schema->schema_version();
     $schema->create_ddl_dir( 'MySQL', $version, $sql_dir, $preversion );
@@ -88,25 +111,19 @@ sub prepare {
 }
 
 sub check {
-    my $schema = CPAN::Testers::Schema->connect_from_config;
+    my @args = @_;
     say "  Current: " . $schema->get_db_version;
     say "Available: " . join ", ", $schema->ordered_schema_versions;
 }
 
 sub install {
-    my $schema;
-    if ( $ARGV[0] ) {
-        $schema = CPAN::Testers::Schema->connect( $ARGV[0] );
-    }
-    else {
-        $schema = CPAN::Testers::Schema->connect_from_config;
-    }
+    my @args = @_;
     $schema->install( '0.000' );
     $schema->upgrade;
 }
 
 sub upgrade {
-    my $schema = CPAN::Testers::Schema->connect_from_config;
+    my @args = @_;
     if ( !$schema->get_db_version() ) {
         $schema->deploy;
     }
@@ -117,7 +134,6 @@ sub upgrade {
 
 sub fetch {
     my ( @args ) = @_;
-    my $schema = CPAN::Testers::Schema->connect_from_config;
     GetOptionsFromArray( \@args, \my %opt,
         'dist|d=s@',
     );
