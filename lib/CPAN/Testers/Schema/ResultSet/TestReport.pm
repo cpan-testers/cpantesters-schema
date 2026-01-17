@@ -160,14 +160,38 @@ my $zipper = Data::FlexSerializer->new(
     detect_sereal       => 1,
     detect_json         => 1,
 );
+my $nozipper = Data::FlexSerializer->new(
+    assume_compression  => 0,
+    detect_sereal       => 1,
+    detect_json         => 1,
+);
 
 sub parse_metabase_report( $self, $row ) {
     if ( $row->{fact} ) {
-        return $zipper->deserialize( $row->{fact} );
+      local $@;
+      my $fact;
+      eval { $fact = $zipper->deserialize( $row->{fact} ) };
+      if (my $e = $@) {
+        $LOG->error('Error deserializing compressed metabase fact', { guid => $row->{guid}, error => "$e" });
+      }
+      elsif ($fact) {
+        return $fact;
+      }
     }
 
     die "No report" unless $row->{report};
-    my $data = $zipper->deserialize( $row->{report} );
+    local $@;
+    my $data;
+    eval { $data = $zipper->deserialize( $row->{report} ) };
+    if (my $e = $@) {
+      $LOG->error('Error deserializing compressed metabase report', { guid => $row->{guid}, error => "$e" });
+      local $@;
+      eval { $data = $nozipper->deserialize( $row->{report} ) };
+      if (my $e = $@) {
+        $LOG->error('Error deserializing uncompressed metabase report', { guid => $row->{guid}, error => "$e" });
+      }
+    }
+    die "Error parsing metabase report" unless $data;
 
     ### Normalize data
     # The "report" column is more loosey-goosey than the "fact" column:
