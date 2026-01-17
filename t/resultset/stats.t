@@ -61,7 +61,7 @@ subtest 'insert_test_report' => sub {
     subtest 'upload does not exist' => sub {
         my $stat = eval { $rs->insert_test_report($report) };
         my $err = $@;
-        ok $stat, 'stat record was still created';
+        ok $stat, 'stat record was still created' or diag $err;
         $stat_id = $stat->id;
 
         ok looks_like_number($stat->id), 'an id was generated';
@@ -94,6 +94,14 @@ subtest 'insert_test_report' => sub {
         is $stat->guid, 'd0ab4d36-3343-11e7-b830-917e22bfee97', 'correct guid';
         is $stat->state, 'pass', 'correctly changed test state';
     };
+
+    subtest 'insert_test_data' => sub {
+        $report->report->{result}{grade} = 'NA';
+        my $stat = $rs->insert_test_data( $report->report );
+        is $stat->id, $stat_id, 'stat is updated, not duplicated';
+        is $stat->guid, 'd0ab4d36-3343-11e7-b830-917e22bfee97', 'correct guid';
+        is $stat->state, 'na', 'correctly changed test state';
+    };
 };
 
 subtest 'since' => sub {
@@ -111,7 +119,7 @@ subtest 'since' => sub {
                 'perl' => '5.22.2',
                 'platform' => 'x86_64-linux',
                 'postdate' => 201705,
-                'state' => 'pass',
+                'state' => 'na',
                 'tester' => '"Andreas J. K&#246;enig" <andreas.koenig.gmwojprw@franz.ak.mind.de>',
                 'type' => 2,
                 'uploadid' => $upload_id,

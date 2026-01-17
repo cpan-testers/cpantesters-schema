@@ -43,7 +43,9 @@ __PACKAGE__->load_components(qw/Schema::Versioned/);
 __PACKAGE__->upgrade_directory( dist_dir( 'CPAN-Testers-Schema' ) );
 # We sometimes use MariaDB, so make sure DBIx::Class treats it
 # the same as mysql
-__PACKAGE__->ensure_class_loaded('DBIx::Class::Storage::DBI::MariaDB');
+eval {
+  __PACKAGE__->ensure_class_loaded('DBIx::Class::Storage::DBI::MariaDB');
+};
 
 =method connect_from_config
 

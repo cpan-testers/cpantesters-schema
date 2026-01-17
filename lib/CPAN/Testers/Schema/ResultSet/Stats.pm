@@ -22,6 +22,8 @@ L<CPAN::Testers::Schema>
 use CPAN::Testers::Schema::Base 'ResultSet';
 use Log::Any '$LOG';
 use Carp ();
+use DateTime;
+use DateTime::Format::ISO8601;
 
 =method since
 
@@ -78,13 +80,16 @@ information.
 =cut
 
 sub insert_test_report ( $self, $report ) {
-    my $schema = $self->result_source->schema;
-
-    my $guid = $report->id;
-    $LOG->infof( 'Updating stats row (report %s)', $guid );
     my $data = $report->report;
-    my $created = $report->created;
+    $data->{id} ||= $report->id;
+    $data->{created} ||= $report->created;
+    return $self->insert_test_data($data);
+}
 
+sub insert_test_data ( $self, $data ) {
+    $LOG->infof( 'Updating stats row (report %s)', $data->{id} );
+    my $created = DateTime::Format::ISO8601->parse_datetime($data->{created});
+    my $schema = $self->result_source->schema;
     # attempt to find an uploadid, which is required for cpanstats
     my @uploads = $schema->resultset('Upload')->search({
         dist => $data->{distribution}{name},
@@ -94,7 +99,7 @@ sub insert_test_report ( $self, $report ) {
     if ( !@uploads ) {
         $LOG->warnf(
             'No upload matches for dist %s version %s (report %s). Creating provisional record.',
-            $data->{distribution}->@{qw( name version )}, $guid,
+            $data->{distribution}->@{qw( name version )}, $data->{id},
         );
         @uploads = (
           $schema->resultset('Upload')->create({
@@ -110,14 +115,14 @@ sub insert_test_report ( $self, $report ) {
     elsif ( @uploads > 1 ) {
         $LOG->warnf(
             'Multiple upload matches for dist %s version %s (report %s)',
-            $data->{distribution}->@{qw( name version )}, $guid,
+            $data->{distribution}->@{qw( name version )}, $data->{id},
         );
     }
     my $uploadid = $uploads[0]->uploadid;
 
     my $encoded_name = $data->{reporter}{name} =~ s/([^[:ascii:]])/'&#' . ord( $1 ) . ';'/ger;
     my $stat = {
-        guid => $guid,
+        guid => $data->{id},
         state => lc($data->{result}{grade}),
         postdate => $created->strftime('%Y%m'),
         tester => qq["] . $encoded_name . qq[" <$data->{reporter}{email}>],
