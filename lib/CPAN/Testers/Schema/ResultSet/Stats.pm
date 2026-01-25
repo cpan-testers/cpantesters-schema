@@ -87,7 +87,7 @@ sub insert_test_report ( $self, $report ) {
 }
 
 sub insert_test_data ( $self, $data ) {
-    $LOG->infof( 'Updating stats row (report %s)', $data->{id} );
+    $LOG->info( 'Updating stats row', { guid => $data->{id} });
     my $created = DateTime::Format::ISO8601->parse_datetime($data->{created});
     my $schema = $self->result_source->schema;
     # attempt to find an uploadid, which is required for cpanstats
