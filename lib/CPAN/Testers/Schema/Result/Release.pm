@@ -209,4 +209,7 @@ belongs_to report => 'CPAN::Testers::Schema::Result::Stats', {
     'foreign.guid' => 'self.guid',
 };
 
+primary_key qw{dist version oncpan distmat perlmat patched};
+unique_constraint summary => [ qw{dist version oncpan distmat perlmat patched} ];
+
 1;
